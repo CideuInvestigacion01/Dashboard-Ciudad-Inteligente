@@ -22,7 +22,7 @@ st.set_page_config(page_title="Tablero de Ciudad Inteligente", layout="wide")
 
 @st.cache_data
 def cargar_ejemplo() -> pd.DataFrame:
-    return cargar_archivo(Path(__file__).resolve().parents[3] / "data" / "ejemplo_respuestas.csv")
+    return cargar_archivo(Path(__file__).resolve().parents[2] / "data" / "ejemplo_respuestas.csv")
 
 
 st.title("Tablero de Autoevaluación de Transición Digital y Ciudades Inteligentes")
