@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-from typing import Iterable
-
 import pandas as pd
 
 from tablero_ciudad_inteligente.config import (
@@ -31,7 +29,9 @@ def _parsear_multiple(valor: object) -> list[str]:
     texto = _a_texto(valor)
     if not texto:
         return []
-    return [parte.strip() for parte in texto.split(";") if parte.strip()]
+    if ";" in texto:
+        return [parte.strip() for parte in texto.split(";") if parte.strip()]
+    return [parte.strip() for parte in texto.split(" ") if parte.strip()] if texto in {"1", "0"} else [texto]
 
 
 def _puntuar_multiple(pregunta: str, valor: object) -> float:
@@ -63,7 +63,7 @@ def _puntuar_ordinal(pregunta: str, valor: object) -> float:
 def _puntuar_obstaculos_priorizados(valor: object) -> float:
     """No castiga fuertemente el reconocimiento de problemas.
 
-    Si la ciudad puede identificar prioridades, se interpreta como madurez diagnóstica.
+    Si el territorio puede identificar prioridades, se interpreta como madurez diagnóstica.
     """
     seleccionadas = _parsear_multiple(valor)
     if not seleccionadas:
@@ -132,7 +132,7 @@ def calcular_resultados(fila: pd.Series) -> ResultadoTablero:
     recomendaciones = construir_recomendaciones(fila, resultados_dimensiones)
 
     return ResultadoTablero(
-        ciudad=_a_texto(fila.get("ciudad", "Ciudad sin nombre")) or "Ciudad sin nombre",
+        ciudad=_a_texto(fila.get("entidad", fila.get("ciudad", "Observación sin nombre"))) or "Observación sin nombre",
         fecha=_a_texto(fila.get("fecha", "Sin fecha")) or "Sin fecha",
         puntaje_global=puntaje_global,
         nivel_global=nivel_desde_puntaje(puntaje_global),

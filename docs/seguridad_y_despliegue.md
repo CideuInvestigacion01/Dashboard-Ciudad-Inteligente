@@ -1,8 +1,14 @@
 # Seguridad y despliegue
 
-## Por qué esta app no debería quedar abierta sin contraseña
+## Cambio aplicado en esta versión
 
-Aunque el cuestionario no parezca altamente sensible a primera vista, sí puede revelar:
+La aplicación ya **no incluye una contraseña integrada en el código ni depende de una variable obligatoria para funcionar**.
+
+Esto facilita que otros desarrolladores reutilicen el repositorio y evita acoplar la app a una credencial específica desde la primera versión.
+
+## Por qué sigue siendo importante proteger la app
+
+Aunque el tablero sea de autoevaluación, puede revelar:
 
 - debilidades institucionales,
 - carencias de infraestructura digital,
@@ -12,16 +18,16 @@ Aunque el cuestionario no parezca altamente sensible a primera vista, sí puede 
 
 En un entorno real, esa información puede ser sensible desde el punto de vista institucional, reputacional y operativo.
 
-Además, la normativa mexicana exige medidas administrativas, técnicas y físicas para proteger datos personales, y los marcos internacionales de seguridad recomiendan autenticación robusta y buena gestión de sesiones. citeturn548820search5turn548820search8turn548820search0turn548820search6turn548820search4
+Por eso, aunque la contraseña ya no venga integrada, **sí debe recomendarse y aplicarse en despliegues reales**, idealmente junto con autenticación por usuario y control por organización.
 
-## Nivel mínimo recomendado
+## Recomendación mínima
 
-Para una primera versión:
+Para una primera versión desplegada con datos reales:
 
-- contraseña de acceso,
+- autenticación externa o en la propia app,
 - HTTPS,
 - secretos fuera del repositorio,
-- hash bcrypt de contraseñas,
+- control de acceso por organización,
 - deshabilitar exposición pública innecesaria.
 
 ## Nivel recomendado para producción
@@ -39,9 +45,9 @@ Para una primera versión:
 
 ### Opción 1. Prototipo controlado
 
-- Streamlit + password
-- Render / VM pequeña
-- acceso restringido
+- Streamlit sin contraseña embebida
+- acceso restringido por red privada, túnel seguro o autenticación del proveedor de hosting
+- datos anonimizados o controlados
 
 ### Opción 2. Producción institucional
 

@@ -1,4 +1,7 @@
-from tablero_ciudad_inteligente.scoring import nivel_desde_puntaje, puntuar_pregunta
+from pathlib import Path
+
+from tablero_ciudad_inteligente.data_loader import cargar_archivo
+from tablero_ciudad_inteligente.scoring import calcular_resultados, nivel_desde_puntaje, puntuar_pregunta
 
 
 def test_nivel_desde_puntaje():
@@ -23,3 +26,13 @@ def test_puntuar_multiple_q5():
         "Plataforma digital de participación o atención ciudadana.;Transversalización digital del trabajo entre secretarías.",
     )
     assert score > 0.0
+
+
+def test_cargar_export_kobo_con_labels():
+    ruta = Path("/mnt/data/CIDEU_SMRT_V2_Autoevaluación_-_all_versions_-_labels_-_2026-04-14-21-02-31.csv")
+    df = cargar_archivo(ruta)
+    assert "q1" in df.columns
+    assert "q27" in df.columns
+    assert "entidad" in df.columns
+    resultado = calcular_resultados(df.iloc[0])
+    assert resultado.ciudad

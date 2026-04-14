@@ -1,24 +1,18 @@
-# Tablero de Autoevaluación de Transición Digital y Ciudades Inteligentes
+# Tablero de autoevaluación de transición digital y ciudades inteligentes
 
-Aplicación en **Python + Streamlit** para transformar respuestas de un instrumento de autoevaluación en un tablero con:
+Este proyecto implementa un dashboard en Python para visualizar el estado de desarrollo de un **territorio** frente a su transición digital y su avance hacia una ciudad o territorio inteligente.
 
-- indicadores por dimensión,
-- gráficas comparativas,
-- radar / spider charts,
-- diagnóstico automático del nivel de madurez,
-- recomendaciones prácticas,
-- bibliografía sugerida,
-- base técnica preparada para futura integración con **KoboToolbox**.
+El término territorio se usa de forma amplia: puede tratarse de una **ciudad, municipio, país, región o cualquier otra unidad subnacional o institucional** que responda el instrumento.
 
-La estructura del instrumento parte de las dimensiones compartidas por el usuario: visión estratégica, infraestructura, gobernanza de datos, participación, economía creativa, financiamiento y obstáculos. fileciteturn0file0L1-L112
+La app está basada en el instrumento de autoevaluación compartido por el usuario. fileciteturn0file0
 
 ---
 
 ## 1. Objetivo
 
-El tablero busca ayudar a una ciudad o municipio a responder una pregunta sencilla:
+El tablero busca ayudar a responder una pregunta sencilla:
 
-**¿En qué estado se encuentra su transición hacia una ciudad inteligente, digital, inclusiva y basada en datos?**
+**¿En qué estado se encuentra un territorio en su transición hacia un modelo inteligente, digital, inclusivo y basado en datos?**
 
 La app convierte respuestas del cuestionario en puntajes normalizados, interpreta fortalezas y brechas, y sugiere acciones de mejora.
 
@@ -64,6 +58,8 @@ La app convierte respuestas del cuestionario en puntajes normalizados, interpret
 └── README.md
 ```
 
+> `auth.py` puede conservarse como referencia para una futura autenticación, pero la versión actual de la app funciona sin exigir contraseña en el código.
+
 ---
 
 ## 4. Instalación
@@ -92,129 +88,88 @@ La aplicación abrirá una interfaz web local.
 
 ---
 
-## 6. Formato de datos esperado
+## 6. Formato de datos soportado
 
 La app acepta:
 
 - `.csv`
 - `.xlsx`
 
-El archivo debe contener una fila por ciudad o evaluación.
+### Formato 1. Esquema simplificado interno
 
-Por defecto, el proyecto espera columnas `q1` a `q27`, donde:
+Un archivo con una fila por evaluación y columnas `q1` a `q27`.
 
-- preguntas de selección única guardan un valor de texto,
-- preguntas múltiples guardan valores separados por `;`,
-- preguntas de prioridad pueden guardarse como texto separado por `;` respetando el orden.
+### Formato 2. Export real de KoboToolbox
 
-Ejemplo:
+La app ya acepta directamente un export con **labels** como el archivo que compartiste, por ejemplo con columnas como:
 
-```text
-ciudad,fecha,q1,q2,q3,...,q27
-Ciudad Ejemplo,2026-04-14,"Existe un plan local de transformación digital.;Existe una oficina / secretaría encargada de los temas de transformación digital.","Existe un plan o estrategia formal, proyectos y acciones gestionadas por una oficina especializada.",...
-```
+- `¿Cuál de los siguientes supuestos describe mejor la situación de la estrategia o plan formal de ciudades inteligentes?`
+- `¿Cómo se encuentra el nivel de gestión de datos urbanos (calidad, interoperabilidad, accesibilidad)?`
+- `_submission_time`
+- `_submitted_by`
 
-El archivo `data/esquema_columnas.csv` documenta el esquema base.
+Durante la carga, esas columnas se renombran internamente a `q1...q27` para reutilizar el motor de scoring.
 
----
+### Identificación del territorio
 
-## 7. Lógica de evaluación
+La app intentará detectar automáticamente una columna para nombrar cada observación usando, en este orden aproximado:
 
-### Dimensiones evaluadas
+- `ciudad`
+- `municipio`
+- `país` / `pais`
+- `región` / `region`
+- `territorio`
+- `entidad`
+- `nombre`
+- `_submitted_by`
 
-1. Visión estratégica, gobernanza y acciones gubernamentales
-2. Infraestructura, capacidades técnicas y plataformas
-3. Gobernanza de datos, privacidad y ética
-4. Participación ciudadana y equidad digital
-5. Economía creativa y patrimonio
-6. Financiamiento, sostenibilidad y alianzas
-7. Obstáculos, aprendizajes y recomendaciones
-
-### Resultado por dimensión
-
-Cada dimensión se transforma en un puntaje de **0 a 100**.
-
-### Resultado global
-
-Se calcula como promedio simple de las 7 dimensiones.
-
-### Niveles interpretativos
-
-- **0 a 24** → Inicial
-- **25 a 49** → Emergente
-- **50 a 74** → En consolidación
-- **75 a 100** → Avanzado
-
-> Esta metodología es intencionalmente transparente y editable. La idea es que el equipo pueda recalibrarla conforme valide el instrumento con expertos sectoriales.
+Si no encuentra una columna clara, asignará nombres automáticos como `Observación 1`, `Observación 2`, etc.
 
 ---
 
-## 8. Seguridad básica de acceso
+## 7. Seguridad de acceso
 
-La app incluye autenticación sencilla por contraseña usando variables de entorno.
+La versión actual **no trae una contraseña integrada en el código**.
 
-Archivo `.env` sugerido:
+Esto se hizo para que el repositorio sea más limpio, reusable y fácil de adaptar por otros equipos. Sin embargo, **sí se recomienda fuertemente** proteger el despliegue cuando la app se use con datos reales.
 
-```env
-APP_PASSWORD_HASH=$2b$12$ejemplo_hash_bcrypt
-```
+### Recomendación mínima
 
-Para generar un hash bcrypt desde Python:
-
-```python
-from passlib.context import CryptContext
-pwd = CryptContext(schemes=["bcrypt"], deprecated="auto")
-print(pwd.hash("tu_password_seguro"))
-```
-
-### ¿Por qué proteger la app?
-
-Aunque hoy se use como autoevaluación, en una fase posterior el tablero podría mostrar:
-
-- respuestas institucionales no públicas,
-- capacidades internas de gobierno,
-- vacíos de ciberseguridad,
-- información sensible sobre debilidades operativas,
-- metadatos de personas usuarias o responsables institucionales.
-
-Por eso conviene desplegarlo al menos con:
-
-- autenticación,
+- autenticación al frente,
 - HTTPS,
-- control de acceso por rol,
-- trazabilidad de sesiones,
-- almacenamiento seguro de secretos.
+- secretos fuera del repositorio,
+- control de acceso por usuario u organización.
 
 Más detalle en `docs/seguridad_y_despliegue.md`.
 
 ---
 
-## 9. KoboToolbox hoy y mañana
+## 8. KoboToolbox hoy y mañana
 
 ### Estado actual
 
-Hoy la app está preparada para **cargar manualmente un export** descargado desde KoboToolbox.
+Hoy la app está preparada para **cargar manualmente** un export descargado desde KoboToolbox.
 
 ### Ruta futura sugerida
 
-1. Formulario respondido en KoboToolbox.
-2. Export automático vía API.
-3. Ingesta validada en una base de datos.
-4. Asociación de resultados a una cuenta o municipio.
-5. Acceso seguro al tablero con autenticación.
-6. Actualización automática de indicadores y reportes.
+1. El territorio responde el formulario.
+2. KoboToolbox genera la observación.
+3. Un proceso automático descarga la respuesta.
+4. La respuesta se valida y se guarda.
+5. El usuario inicia sesión.
+6. El usuario visualiza solo sus resultados.
 
 Más detalle en `docs/automatizacion_futura.md`.
 
 ---
 
-## 10. Recomendaciones de despliegue
+## 9. Recomendaciones de despliegue
 
 ### Prototipo rápido
 
 - Streamlit Community Cloud o Render para demo cerrada
-- contraseña simple
 - datos anonimizados
+- acceso restringido por capa externa o red privada
 
 ### Entorno serio / institucional
 
@@ -228,18 +183,7 @@ Más detalle en `docs/automatizacion_futura.md`.
 
 ---
 
-## 11. Bibliografía base sugerida
-
-El proyecto incorpora recomendaciones automáticas apoyadas en marcos ampliamente usados para ciudades inteligentes, gobernanza de datos y transformación digital:
-
-- **UN-Habitat**: guías de smart cities centradas en las personas. citeturn839519search0turn839519search4
-- **OECD**: smart city data governance y smart cities & inclusive growth. citeturn839519search1turn839519search9turn839519search25
-- **ISO 37122**: indicadores para smart cities. citeturn839519search2turn839519search22
-- **KoboToolbox API**: automatización de exportaciones y sincronización futura. citeturn839519search3turn839519search11
-
----
-
-## 12. Pruebas
+## 10. Pruebas
 
 ```bash
 poetry run pytest
@@ -247,14 +191,13 @@ poetry run pytest
 
 ---
 
-## 13. Siguientes mejoras sugeridas
+## 11. Siguientes mejoras sugeridas
 
-- autenticación por usuario y municipio,
+- autenticación por usuario y territorio,
 - persistencia en base de datos,
 - descarga automática desde KoboToolbox,
-- historial temporal por ciudad,
-- benchmarking entre ciudades,
+- historial temporal por territorio,
+- benchmarking entre territorios,
 - módulo de reportes PDF,
 - panel de administración,
 - control fino de permisos por rol.
-

@@ -11,6 +11,20 @@ Esto permite:
 - revisar el modelo de recomendaciones,
 - probar el flujo con bajo costo técnico inicial.
 
+## Cambio conceptual importante
+
+El tablero ya no asume que cada observación representa únicamente a un municipio.
+
+Una observación puede corresponder a:
+
+- una ciudad,
+- un municipio,
+- una región,
+- un país,
+- otra unidad territorial o institucional.
+
+Por eso, en el código se usa el concepto general de **territorio** o **entidad**.
+
 ## Arquitectura futura sugerida
 
 ### Fase 1. Export manual
@@ -21,28 +35,28 @@ Esto permite:
 
 ### Fase 2. Export automatizado desde KoboToolbox
 
-Usar la API oficial de KoboToolbox para:
+Agregar un módulo de ingestión que use la API oficial de KoboToolbox para:
 
 - autenticar con API key,
 - identificar el `asset_uid` del formulario,
 - generar exportaciones sincronizadas,
-- descargar respuestas limpias para el tablero. citeturn839519search3turn839519search11
+- descargar respuestas limpias para el tablero.
 
-### Fase 3. Persistencia y cuentas de usuario
+## Fase 3. Persistencia y cuentas de usuario
 
 Agregar:
 
 - base de datos PostgreSQL,
-- tabla de municipios,
+- tabla de organizaciones o territorios,
 - tabla de usuarios,
-- tabla de respuestas / evaluaciones,
+- tabla de respuestas o evaluaciones,
 - historial de mediciones por fecha,
 - permisos por organización.
 
-### Fase 4. Portal institucional
+## Fase 4. Portal institucional
 
 - inicio de sesión por usuario,
-- cada municipio ve solo sus resultados,
+- cada territorio ve solo sus resultados,
 - administración central ve comparativos agregados,
 - generación de reportes descargables,
 - alertas cuando baja una dimensión crítica.
@@ -50,9 +64,9 @@ Agregar:
 ## Recomendación de pipeline
 
 1. KoboToolbox recibe respuestas.
-2. Un job programado consulta API.
-3. Se valida esquema.
-4. Se normalizan columnas.
+2. Un job programado consulta la API.
+3. Se valida el esquema.
+4. Se normalizan columnas y nombres de territorio.
 5. Se guarda en base de datos.
 6. Se recalculan puntajes.
 7. Se actualiza el dashboard.
@@ -70,7 +84,7 @@ Así se evita mezclar lógica de datos con interfaz.
 
 ## Consideraciones de identidad y acceso
 
-Cuando cada ciudad pueda entrar a ver sus resultados, ya no bastará una sola contraseña compartida. En ese punto conviene implementar:
+Cuando cada territorio pueda entrar a ver sus resultados, ya no bastará una sola contraseña compartida. En ese punto conviene implementar:
 
 - usuarios por organización,
 - restablecimiento seguro de contraseña,

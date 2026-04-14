@@ -7,7 +7,6 @@ from pathlib import Path
 import pandas as pd
 import streamlit as st
 
-from tablero_ciudad_inteligente.auth import render_login
 from tablero_ciudad_inteligente.charts import (
     grafica_barras_dimensiones,
     grafica_radar_dimensiones,
@@ -28,18 +27,18 @@ def cargar_ejemplo() -> pd.DataFrame:
 
 st.title("Tablero de Autoevaluación de Transición Digital y Ciudades Inteligentes")
 st.caption(
-    "Diagnóstico visual del estado de madurez digital de una ciudad a partir de respuestas de encuesta."
+    "Diagnóstico visual del estado de madurez digital de una ciudad, país o región a partir de respuestas de encuesta."
 )
-
-if not render_login():
-    st.stop()
 
 with st.sidebar:
     st.markdown("### Fuente de datos")
     archivo = st.file_uploader("Sube un CSV o XLSX exportado desde KoboToolbox", type=["csv", "xlsx", "xls"])
+    st.markdown("### Seguridad recomendada")
+    st.info(
+        "Esta versión no exige contraseña en el código. Para despliegues reales se recomienda autenticación, HTTPS y control de acceso por roles."
+    )
 
 if archivo is not None:
-    sufijo = Path(archivo.name).suffix.lower()
     temp_path = Path("/tmp") / archivo.name
     temp_path.write_bytes(archivo.getvalue())
     df = cargar_archivo(temp_path)
@@ -51,27 +50,31 @@ if df.empty:
     st.error("No hay datos para mostrar.")
     st.stop()
 
-columna_ciudad = "ciudad" if "ciudad" in df.columns else None
-etiquetas = df[columna_ciudad].fillna("Sin nombre").astype(str).tolist() if columna_ciudad else [f"Fila {i}" for i in range(len(df))]
+columna_entidad = "entidad" if "entidad" in df.columns else ("ciudad" if "ciudad" in df.columns else None)
+etiquetas = (
+    df[columna_entidad].fillna("Sin nombre").astype(str).tolist()
+    if columna_entidad
+    else [f"Fila {i + 1}" for i in range(len(df))]
+)
 indice = st.sidebar.selectbox("Selecciona una evaluación", options=list(range(len(df))), format_func=lambda i: etiquetas[i])
 fila = seleccionar_fila(df, indice)
 resultado = calcular_resultados(fila)
 
 a, b, c = st.columns(3)
-a.metric("Ciudad / municipio", resultado.ciudad)
+a.metric("Territorio", resultado.ciudad)
 b.metric("Puntaje global", f"{resultado.puntaje_global} / 100")
 c.metric("Nivel global", resultado.nivel_global)
 
 st.markdown("## Estado general")
 
 if resultado.nivel_global == "Inicial":
-    st.error("La ciudad se encuentra en una fase inicial de transición digital. Se recomienda construir bases institucionales y de infraestructura.")
+    st.error("El territorio se encuentra en una fase inicial de transición digital. Se recomienda construir bases institucionales y de infraestructura.")
 elif resultado.nivel_global == "Emergente":
-    st.warning("La ciudad muestra avances aislados o parciales. La prioridad es consolidar capacidades y continuidad.")
+    st.warning("El territorio muestra avances aislados o parciales. La prioridad es consolidar capacidades y continuidad.")
 elif resultado.nivel_global == "En consolidación":
-    st.info("La ciudad cuenta con bases importantes. El siguiente paso es mejorar interoperabilidad, inclusión y sostenibilidad.")
+    st.info("El territorio cuenta con bases importantes. El siguiente paso es mejorar interoperabilidad, inclusión y sostenibilidad.")
 else:
-    st.success("La ciudad presenta un perfil avanzado. Conviene pasar a monitoreo continuo, evidencia de impacto y mejora fina.")
+    st.success("El territorio presenta un perfil avanzado. Conviene pasar a monitoreo continuo, evidencia de impacto y mejora fina.")
 
 st.markdown("## Indicadores por dimensión")
 df_dimensiones = resultados_a_dataframe_dimensiones(resultado)
@@ -103,8 +106,8 @@ for item in resultado.literatura:
 
 st.markdown("## Recomendaciones de evolución técnica")
 st.write(
-    "En una siguiente fase, conviene separar la app en tres capas: ingestión desde KoboToolbox, motor de scoring y visualización con autenticación por usuario."
+    "En una siguiente fase, conviene separar la solución en tres capas: ingestión desde KoboToolbox, motor de scoring y visualización con autenticación por usuario."
 )
 st.write(
-    "También se recomienda persistir resultados en base de datos para construir histórico, benchmarking entre ciudades y alertas automáticas."
+    "También se recomienda persistir resultados en base de datos para construir histórico, benchmarking entre territorios y alertas automáticas."
 )
