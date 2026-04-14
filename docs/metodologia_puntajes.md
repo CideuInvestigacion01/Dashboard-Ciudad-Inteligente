@@ -43,14 +43,6 @@ Se calcula:
 
 Cuando una opción como `Ninguna de las anteriores` aparece, el puntaje se fuerza a `0`.
 
-### 3. Priorización de obstáculos
-
-Estas preguntas no deben castigar a la ciudad por reconocer problemas. Por ello se usan como insumo de diagnóstico y recomendaciones, no como castigo fuerte del puntaje. En esta versión, la dimensión de obstáculos se interpreta con lógica mixta:
-
-- reconocimiento de obstáculos = neutral,
-- identificación de desafíos y factores críticos = evidencia de reflexión institucional,
-- los textos priorizados activan recomendaciones específicas.
-
 ## Interpretación
 
 - **Inicial**: capacidades muy limitadas o fragmentadas.
