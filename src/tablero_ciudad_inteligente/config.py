@@ -7,13 +7,13 @@ from typing import Any
 
 
 DIMENSIONES = {
-    "A": "Visión estratégica y gobernanza",
-    "B": "Infraestructura y capacidades técnicas",
-    "C": "Gobernanza de datos, privacidad y ética",
-    "D": "Participación ciudadana y equidad digital",
-    "E": "Economía creativa y patrimonio",
-    "F": "Financiamiento y alianzas",
-    "G": "Obstáculos y aprendizajes",
+    "A": "Visión Estratégica, Gobernanza y Acciones Gubernamentales",
+    "B": "Infraestructura, Capacidades Técnicas y Plataformas",
+    "C": "Gobernanza de Datos, Privacidad y Ética",
+    "D": "Participación Ciudadana y Equidad Digital",
+    "E": "Economía Creativa y Patrimonio",
+    "F": "Financiamiento, Sostenibilidad y Alianzas",
+    "G": "Obstáculos, Aprendizajes y Recomendaciones",
 }
 
 PREGUNTAS_DIMENSION = {
