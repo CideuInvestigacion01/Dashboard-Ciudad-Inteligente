@@ -1,0 +1,29 @@
+[tool.poetry]
+name = "tablero-ciudad-inteligente"
+version = "0.1.0"
+description = "Dashboard en Streamlit para autoevaluación de transición digital y ciudades inteligentes"
+authors = ["OpenAI <support@openai.com>"]
+readme = "README.md"
+packages = [{ include = "tablero_ciudad_inteligente", from = "src" }]
+
+[tool.poetry.dependencies]
+python = ">=3.11,<3.14"
+pandas = "^2.3.0"
+plotly = "^6.0.0"
+streamlit = "^1.44.0"
+openpyxl = "^3.1.5"
+python-dotenv = "^1.1.0"
+pyyaml = "^6.0.2"
+passlib = {version = "^1.7.4", extras = ["bcrypt"]}
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.0"
+ruff = "^0.11.0"
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+
+[build-system]
+requires = ["poetry-core>=1.8.0"]
+build-backend = "poetry.core.masonry.api"
