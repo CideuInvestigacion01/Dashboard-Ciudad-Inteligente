@@ -60,24 +60,11 @@ def _puntuar_ordinal(pregunta: str, valor: object) -> float:
     return OPCIONES_ORDINALES.get(pregunta, {}).get(texto, 0.0)
 
 
-def _puntuar_obstaculos_priorizados(valor: object) -> float:
-    """No castiga fuertemente el reconocimiento de problemas.
-
-    Si el territorio puede identificar prioridades, se interpreta como madurez diagnóstica.
-    """
-    seleccionadas = _parsear_multiple(valor)
-    if not seleccionadas:
-        return 0.2
-    return min(0.4 + (0.1 * len(seleccionadas)), 0.8)
-
-
 def puntuar_pregunta(pregunta: str, valor: object) -> float:
     if pregunta in OPCIONES_ORDINALES:
         return _puntuar_ordinal(pregunta, valor)
     if pregunta in OPCIONES_MULTIPLE:
         return _puntuar_multiple(pregunta, valor)
-    if pregunta == "q24":
-        return _puntuar_obstaculos_priorizados(valor)
     return 0.0
 
 
