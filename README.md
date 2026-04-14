@@ -4,7 +4,7 @@ Este proyecto implementa un dashboard en Python para visualizar el estado de des
 
 El término territorio se usa de forma amplia: puede tratarse de una **ciudad, municipio, país, región o cualquier otra unidad subnacional o institucional** que responda el instrumento.
 
-La app está basada en el instrumento de autoevaluación compartido por el usuario. fileciteturn0file0
+La app está basada en el instrumento de autoevaluación compartido por el usuario.
 
 ---
 
@@ -101,7 +101,7 @@ Un archivo con una fila por evaluación y columnas `q1` a `q27`.
 
 ### Formato 2. Export real de KoboToolbox
 
-La app ya acepta directamente un export con **labels** como el archivo que compartiste, por ejemplo con columnas como:
+La app ya acepta directamente un export con **labels** con la estructura designada por los investigadores y por kobotoolbox, por ejemplo con columnas como:
 
 - `¿Cuál de los siguientes supuestos describe mejor la situación de la estrategia o plan formal de ciudades inteligentes?`
 - `¿Cómo se encuentra el nivel de gestión de datos urbanos (calidad, interoperabilidad, accesibilidad)?`
