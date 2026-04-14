@@ -103,11 +103,3 @@ for item in resultado.literatura:
     st.markdown(f"**{item['titulo']}**")
     st.write(item["descripcion"])
     st.caption(item["fuente"])
-
-st.markdown("## Recomendaciones de evolución técnica")
-st.write(
-    "En una siguiente fase, conviene separar la solución en tres capas: ingestión desde KoboToolbox, motor de scoring y visualización con autenticación por usuario."
-)
-st.write(
-    "También se recomienda persistir resultados en base de datos para construir histórico, benchmarking entre territorios y alertas automáticas."
-)
