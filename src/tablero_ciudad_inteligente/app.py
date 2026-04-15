@@ -50,12 +50,9 @@ if df.empty:
     st.error("No hay datos para mostrar.")
     st.stop()
 
-columna_entidad = "entidad" if "entidad" in df.columns else ("ciudad" if "ciudad" in df.columns else None)
-etiquetas = (
-    df[columna_entidad].fillna("Sin nombre").astype(str).tolist()
-    if columna_entidad
-    else [f"Fila {i + 1}" for i in range(len(df))]
-)
+es_ejemplo = archivo is None
+prefijo = "Ejemplo" if es_ejemplo else "Evaluacion"
+etiquetas = [f"{prefijo}_{i+1}" for i in range(len(df))]
 indice = st.sidebar.selectbox("Selecciona una evaluación", options=list(range(len(df))), format_func=lambda i: etiquetas[i])
 fila = seleccionar_fila(df, indice)
 resultado = calcular_resultados(fila)
