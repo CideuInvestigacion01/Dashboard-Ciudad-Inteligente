@@ -5,6 +5,8 @@ from __future__ import annotations
 import pandas as pd
 
 from tablero_ciudad_inteligente.config import (
+    ACRONIMOS_DIMENSION,
+    ALERTAS_CONFIG,
     DIMENSIONES,
     LITERATURA,
     OPCIONES_MULTIPLE,
@@ -81,17 +83,15 @@ def nivel_desde_puntaje(puntaje: float) -> str:
 def extraer_alertas(fila: pd.Series) -> list[str]:
     alertas: list[str] = []
 
-    if puntuar_pregunta("q14", fila.get("q14", "")) < 0.5:
-        alertas.append("La gobernanza de datos muestra un nivel bajo o fragmentado.")
-    if puntuar_pregunta("q18", fila.get("q18", "")) < 0.5:
-        alertas.append("La accesibilidad e inclusión digital requieren atención prioritaria.")
-    if puntuar_pregunta("q22", fila.get("q22", "")) < 0.5:
-        alertas.append("La continuidad presupuestaria es insuficiente para sostener la agenda digital.")
+    for pregunta in ("q14", "q18", "q22"):
+        cfg = ALERTAS_CONFIG[pregunta]
+        if puntuar_pregunta(pregunta, fila.get(pregunta, "")) < cfg["threshold"]:
+            alertas.append(cfg["message"])
 
     prioridades = _parsear_multiple(fila.get("q24", ""))
-    for prioridad in prioridades[:2]:
+    for prioridad in prioridades[: ALERTAS_CONFIG["q24_top_n"]]:
         if prioridad in PRIORIZACION_OBSTACULOS:
-            alertas.append(f"Obstáculo priorizado detectado: {prioridad}.")
+            alertas.append(ALERTAS_CONFIG["q24_message_template"].format(prioridad=prioridad))
 
     return alertas
 
@@ -119,7 +119,7 @@ def calcular_resultados(fila: pd.Series) -> ResultadoTablero:
     recomendaciones = construir_recomendaciones(fila, resultados_dimensiones)
 
     return ResultadoTablero(
-        ciudad=_a_texto(fila.get("entidad", fila.get("ciudad", "Observación sin nombre"))) or "Observación sin nombre",
+        ciudad=_a_texto(fila.get("entidad", "Observación sin nombre")) or "Observación sin nombre",
         fecha=_a_texto(fila.get("fecha", "Sin fecha")) or "Sin fecha",
         puntaje_global=puntaje_global,
         nivel_global=nivel_desde_puntaje(puntaje_global),
@@ -134,7 +134,20 @@ def resultados_a_dataframe_dimensiones(resultado: ResultadoTablero) -> pd.DataFr
     return pd.DataFrame(
         [
             {
-                "dimensión": d.nombre,
+                "dimensión": f"{d.nombre} ({ACRONIMOS_DIMENSION.get(d.clave, d.clave)})",
+                "puntaje": d.puntaje,
+                "nivel": d.nivel,
+            }
+            for d in resultado.dimensiones
+        ]
+    )
+
+
+def resultados_a_dataframe_dimensiones_plots(resultado: ResultadoTablero) -> pd.DataFrame:
+    return pd.DataFrame(
+        [
+            {
+                "dimensión": ACRONIMOS_DIMENSION.get(d.clave, d.clave),
                 "puntaje": d.puntaje,
                 "nivel": d.nivel,
             }

@@ -11,6 +11,20 @@ Esto permite:
 - revisar el modelo de recomendaciones,
 - probar el flujo con bajo costo técnico inicial.
 
+## Cambio conceptual importante
+
+El tablero ya no asume que cada observación representa únicamente a un municipio.
+
+Una observación puede corresponder a:
+
+- una ciudad,
+- un municipio,
+- una región,
+- un país,
+- otra unidad territorial o institucional.
+
+Por eso, en el código se usa el concepto general de **territorio** o **entidad**.
+
 ## Arquitectura futura sugerida
 
 ### Fase 1. Export manual

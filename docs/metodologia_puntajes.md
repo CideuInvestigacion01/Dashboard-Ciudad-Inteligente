@@ -43,6 +43,7 @@ Se calcula:
 
 Cuando una opción como `Ninguna de las anteriores` aparece, el puntaje se fuerza a `0`.
 
+
 ## Interpretación
 
 - **Inicial**: capacidades muy limitadas o fragmentadas.

@@ -39,20 +39,29 @@ PREGUNTAS_KOBO = {
     "q27": "¿Qué factores han sido críticos para los avances logrados hasta ahora?",
 }
 
-COLUMNAS_IDENTIDAD = [
-    "ciudad",
-    "municipio",
+COLUMNAS_PAIS = [
     "país",
     "pais",
-    "región",
-    "region",
+    "country",
+    "nombre del país",
+    "nombre del pais",
+]
+
+COLUMNAS_CIUDAD = [
+    "ciudad",
+    "city",
+    "municipio",
+    "nombre de la ciudad",
+    "nombre del municipio",
+]
+
+COLUMNAS_IDENTIDAD = [
     "territorio",
     "entidad",
     "nombre",
     "nombre del territorio",
-    "nombre de la ciudad",
-    "nombre del municipio",
-    "country",
+    "region",
+    "región",
     "region_name",
     "territory_name",
     "_submitted_by",
@@ -91,6 +100,12 @@ def _normalizar_texto(texto: str) -> str:
     return texto
 
 
+def _texto_limpio(valor: object) -> str:
+    if pd.isna(valor):
+        return ""
+    return str(valor).strip()
+
+
 def _renombrar_desde_kobo(nuevo: pd.DataFrame) -> pd.DataFrame:
     """Renombra columnas del export de Kobo con labels a q1..q27 si aplica."""
     mapeo: dict[str, str] = {}
@@ -116,16 +131,74 @@ def _buscar_columna(df: pd.DataFrame, candidatas: list[str]) -> str | None:
     return None
 
 
+def _construir_nombre_territorio(pais: str, ciudad: str, fallback: str) -> str:
+    pais = _texto_limpio(pais)
+    ciudad = _texto_limpio(ciudad)
+    fallback = _texto_limpio(fallback)
+
+    if pais and ciudad:
+        return f"{pais} - {ciudad}"
+    if ciudad:
+        return ciudad
+    if pais:
+        return pais
+    if fallback:
+        return fallback
+    return "Observación sin nombre"
+
+
 def _agregar_columnas_base(df: pd.DataFrame) -> pd.DataFrame:
-    """Asegura columnas base para identificar territorio y fecha."""
+    """Asegura columnas base para identificar país, ciudad, territorio y fecha."""
     nuevo = df.copy()
 
+    if "pais" not in nuevo.columns:
+        col_pais = _buscar_columna(nuevo, COLUMNAS_PAIS)
+        nuevo["pais"] = (
+            nuevo[col_pais].fillna("").astype(str).str.strip()
+            if col_pais
+            else ""
+        )
+
+    if "ciudad" not in nuevo.columns:
+        col_ciudad = _buscar_columna(nuevo, COLUMNAS_CIUDAD)
+        nuevo["ciudad"] = (
+            nuevo[col_ciudad].fillna("").astype(str).str.strip()
+            if col_ciudad
+            else ""
+        )
+
+    col_fallback = _buscar_columna(nuevo, COLUMNAS_IDENTIDAD)
+
     if "entidad" not in nuevo.columns:
-        col_entidad = _buscar_columna(nuevo, COLUMNAS_IDENTIDAD)
-        if col_entidad:
-            nuevo["entidad"] = nuevo[col_entidad].fillna("Observación sin nombre").astype(str)
+        if col_fallback:
+            fallback_series = nuevo[col_fallback].fillna("").astype(str).str.strip()
         else:
-            nuevo["entidad"] = [f"Observación {i + 1}" for i in range(len(nuevo))]
+            fallback_series = pd.Series([""] * len(nuevo), index=nuevo.index)
+
+        nuevo["entidad"] = [
+            _construir_nombre_territorio(
+                pais=nuevo.at[idx, "pais"],
+                ciudad=nuevo.at[idx, "ciudad"],
+                fallback=fallback_series.at[idx],
+            )
+            for idx in nuevo.index
+        ]
+
+        if not col_fallback:
+            nuevo["entidad"] = [
+                valor if valor != "Observación sin nombre" else f"Observación {i + 1}"
+                for i, valor in enumerate(nuevo["entidad"].tolist())
+            ]
+    else:
+        nuevo["entidad"] = nuevo["entidad"].fillna("").astype(str).str.strip()
+        nuevo["entidad"] = [
+            _construir_nombre_territorio(
+                pais=nuevo.at[idx, "pais"],
+                ciudad=nuevo.at[idx, "ciudad"],
+                fallback=nuevo.at[idx, "entidad"],
+            )
+            for idx in nuevo.index
+        ]
 
     if "fecha" not in nuevo.columns:
         col_fecha = _buscar_columna(nuevo, COLUMNAS_FECHA)
@@ -144,6 +217,44 @@ def normalizar_columnas(df: pd.DataFrame) -> pd.DataFrame:
     nuevo = _renombrar_desde_kobo(nuevo)
     nuevo = _agregar_columnas_base(nuevo)
     return nuevo
+
+
+def construir_etiquetas_evaluacion(df: pd.DataFrame) -> list[str]:
+    """Construye etiquetas legibles para el selector usando país y ciudad.
+
+    Si se repite el mismo nombre base, agrega sufijos _2, _3, etc.
+    """
+    if df.empty:
+        return []
+
+    base_labels = []
+    for _, fila in df.iterrows():
+        pais = _texto_limpio(fila.get("pais", ""))
+        ciudad = _texto_limpio(fila.get("ciudad", ""))
+        entidad = _texto_limpio(fila.get("entidad", ""))
+
+        if pais and ciudad:
+            base = f"{pais} - {ciudad}"
+        elif entidad:
+            base = entidad
+        elif ciudad:
+            base = ciudad
+        elif pais:
+            base = pais
+        else:
+            base = "Observación sin nombre"
+
+        base_labels.append(base)
+
+    conteos: dict[str, int] = {}
+    etiquetas: list[str] = []
+
+    for base in base_labels:
+        conteos[base] = conteos.get(base, 0) + 1
+        n = conteos[base]
+        etiquetas.append(base if n == 1 else f"{base}_{n}")
+
+    return etiquetas
 
 
 def seleccionar_fila(df: pd.DataFrame, indice: int) -> pd.Series:

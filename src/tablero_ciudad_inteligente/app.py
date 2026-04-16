@@ -13,11 +13,16 @@ from tablero_ciudad_inteligente.charts import (
     grafica_radar_gobierno_datos,
     tabla_recomendaciones,
 )
-from tablero_ciudad_inteligente.data_loader import cargar_archivo, seleccionar_fila
+from tablero_ciudad_inteligente.config import MENSAJES_NIVEL_GLOBAL, TEXTOS_APP
+from tablero_ciudad_inteligente.data_loader import (
+    cargar_archivo,
+    construir_etiquetas_evaluacion,
+    seleccionar_fila,
+)
 from tablero_ciudad_inteligente.scoring import calcular_resultados, resultados_a_dataframe_dimensiones
 
 
-st.set_page_config(page_title="Tablero de Ciudad Inteligente", layout="wide")
+st.set_page_config(page_title=TEXTOS_APP["page_title"], layout="wide")
 
 
 @st.cache_data
@@ -25,55 +30,61 @@ def cargar_ejemplo() -> pd.DataFrame:
     return cargar_archivo(Path(__file__).resolve().parents[2] / "data" / "ejemplo_respuestas.csv")
 
 
-st.title("Tablero de Autoevaluación de Transición Digital y Ciudades Inteligentes")
-st.caption(
-    "Diagnóstico visual del estado de madurez digital de una ciudad, país o región a partir de respuestas de encuesta."
-)
+def _csv_recomendaciones(resultado) -> bytes:
+    df_recomendaciones = tabla_recomendaciones(resultado)
+    return df_recomendaciones.to_csv(index=False).encode("utf-8-sig")
+
+
+st.title(TEXTOS_APP["main_title"])
+st.caption(TEXTOS_APP["main_caption"])
 
 with st.sidebar:
-    st.markdown("### Fuente de datos")
-    archivo = st.file_uploader("Sube un CSV o XLSX exportado desde KoboToolbox", type=["csv", "xlsx", "xls"])
-    st.markdown("### Seguridad recomendada")
-    st.info(
-        "Esta versión no exige contraseña en el código. Para despliegues reales se recomienda autenticación, HTTPS y control de acceso por roles."
+    st.markdown(TEXTOS_APP["sidebar_data_title"])
+    archivo = st.file_uploader(
+        TEXTOS_APP["sidebar_uploader_label"],
+        type=["csv", "xlsx", "xls"],
     )
+    st.markdown(TEXTOS_APP["sidebar_security_title"])
+    st.info(TEXTOS_APP["sidebar_security_info"])
 
 if archivo is not None:
     temp_path = Path("/tmp") / archivo.name
     temp_path.write_bytes(archivo.getvalue())
     df = cargar_archivo(temp_path)
 else:
-    st.info("No se cargó archivo. Se usa el dataset de ejemplo incluido en el proyecto.")
+    st.info(TEXTOS_APP["example_dataset_info"])
     df = cargar_ejemplo()
 
 if df.empty:
-    st.error("No hay datos para mostrar.")
+    st.error(TEXTOS_APP["no_data_error"])
     st.stop()
 
-es_ejemplo = archivo is None
-prefijo = "Ejemplo" if es_ejemplo else "Evaluacion"
-etiquetas = [f"{prefijo}_{i+1}" for i in range(len(df))]
-indice = st.sidebar.selectbox("Selecciona una evaluación", options=list(range(len(df))), format_func=lambda i: etiquetas[i])
+etiquetas = construir_etiquetas_evaluacion(df)
+indice = st.sidebar.selectbox(
+    TEXTOS_APP["evaluation_selector_label"],
+    options=list(range(len(df))),
+    format_func=lambda i: etiquetas[i],
+)
 fila = seleccionar_fila(df, indice)
 resultado = calcular_resultados(fila)
 
 a, b, c = st.columns(3)
-a.metric("Territorio", resultado.ciudad)
-b.metric("Puntaje global", f"{resultado.puntaje_global} / 100")
-c.metric("Nivel global", resultado.nivel_global)
+a.metric(TEXTOS_APP["metric_territory"], resultado.ciudad)
+b.metric(TEXTOS_APP["metric_global_score"], f"{resultado.puntaje_global} / 100")
+c.metric(TEXTOS_APP["metric_global_level"], resultado.nivel_global)
 
-st.markdown("## Estado general")
+st.markdown(TEXTOS_APP["section_general_state"])
 
 if resultado.nivel_global == "Inicial":
-    st.error("El territorio se encuentra en una fase inicial de transición digital. Se recomienda construir bases institucionales y de infraestructura.")
+    st.error(MENSAJES_NIVEL_GLOBAL["Inicial"])
 elif resultado.nivel_global == "Emergente":
-    st.warning("El territorio muestra avances aislados o parciales. La prioridad es consolidar capacidades y continuidad.")
+    st.warning(MENSAJES_NIVEL_GLOBAL["Emergente"])
 elif resultado.nivel_global == "En consolidación":
-    st.info("El territorio cuenta con bases importantes. El siguiente paso es mejorar interoperabilidad, inclusión y sostenibilidad.")
+    st.info(MENSAJES_NIVEL_GLOBAL["En consolidación"])
 else:
-    st.success("El territorio presenta un perfil avanzado. Conviene pasar a monitoreo continuo, evidencia de impacto y mejora fina.")
+    st.success(MENSAJES_NIVEL_GLOBAL["Avanzado"])
 
-st.markdown("## Indicadores por dimensión")
+st.markdown(TEXTOS_APP["section_dimensions"])
 df_dimensiones = resultados_a_dataframe_dimensiones(resultado)
 st.dataframe(df_dimensiones, use_container_width=True, hide_index=True)
 
@@ -85,17 +96,30 @@ with col2:
 
 st.plotly_chart(grafica_radar_gobierno_datos(resultado), use_container_width=True)
 
-st.markdown("## Alertas y hallazgos")
+st.markdown(TEXTOS_APP["section_alerts"])
 if resultado.alertas:
     for alerta in resultado.alertas:
         st.write(f"- {alerta}")
 else:
-    st.write("- No se detectaron alertas críticas en esta evaluación.")
+    st.write(TEXTOS_APP["no_critical_alerts"])
 
-st.markdown("## Recomendaciones")
-st.dataframe(tabla_recomendaciones(resultado), use_container_width=True, hide_index=True)
+st.markdown(TEXTOS_APP["section_recommendations"])
 
-st.markdown("## Literatura sugerida")
+for i, recomendacion in enumerate(resultado.recomendaciones, start=1):
+    st.markdown(f"### {i}. {recomendacion['dimension']}")
+    st.write(f"**{TEXTOS_APP['recommendation_priority_label']}:** {recomendacion['prioridad']}")
+    st.write(f"**{TEXTOS_APP['recommendation_diagnostic_label']}:** {recomendacion['diagnostico']}")
+    st.write(f"**{TEXTOS_APP['recommendation_next_step_label']}:** {recomendacion['siguiente_paso']}")
+    st.write(f"**{TEXTOS_APP['recommendation_literature_label']}:** {recomendacion['literatura']}")
+
+st.download_button(
+    label=TEXTOS_APP["recommendations_download_button"],
+    data=_csv_recomendaciones(resultado),
+    file_name=TEXTOS_APP["recommendations_download_filename"],
+    mime="text/csv",
+)
+
+st.markdown(TEXTOS_APP["section_literature"])
 for item in resultado.literatura:
     st.markdown(f"**{item['titulo']}**")
     st.write(item["descripcion"])

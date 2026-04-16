@@ -45,7 +45,6 @@ La app convierte respuestas del cuestionario en puntajes normalizados, interpret
 │   └── tablero_ciudad_inteligente/
 │       ├── __init__.py
 │       ├── app.py
-│       ├── auth.py
 │       ├── charts.py
 │       ├── config.py
 │       ├── data_loader.py
@@ -58,7 +57,7 @@ La app convierte respuestas del cuestionario en puntajes normalizados, interpret
 └── README.md
 ```
 
-> `auth.py` puede conservarse como referencia para una futura autenticación, pero la versión actual de la app funciona sin exigir contraseña en el código.
+> La versión actual del proyecto no incluye un módulo de autenticación en el código base. Si en una siguiente fase se requiere control de acceso, se recomienda implementarlo como parte de una arquitectura de despliegue o de una capa de autenticación dedicada.
 
 ---
 
@@ -101,7 +100,7 @@ Un archivo con una fila por evaluación y columnas `q1` a `q27`.
 
 ### Formato 2. Export real de KoboToolbox
 
-La app ya acepta directamente un export con **labels** con la estructura designada por los investigadores y por kobotoolbox, por ejemplo con columnas como:
+La app ya acepta directamente un export con **labels** como el archivo que compartiste, por ejemplo con columnas como:
 
 - `¿Cuál de los siguientes supuestos describe mejor la situación de la estrategia o plan formal de ciudades inteligentes?`
 - `¿Cómo se encuentra el nivel de gestión de datos urbanos (calidad, interoperabilidad, accesibilidad)?`
