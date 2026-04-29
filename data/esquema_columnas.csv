@@ -1,30 +1,35 @@
-columna,descripcion
-ciudad,Nombre de la ciudad o municipio
-fecha,Fecha de evaluación
-q1,Pregunta 1
-q2,Pregunta 2
-q3,Pregunta 3
-q4,Pregunta 4
-q5,Pregunta 5
-q6,Pregunta 6
-q7,Pregunta 7
-q8,Pregunta 8
-q9,Pregunta 9
-q10,Pregunta 10
-q11,Pregunta 11
-q12,Pregunta 12
-q13,Pregunta 13
-q14,Pregunta 14
-q15,Pregunta 15
-q16,Pregunta 16
-q17,Pregunta 17
-q18,Pregunta 18
-q19,Pregunta 19
-q20,Pregunta 20
-q21,Pregunta 21
-q22,Pregunta 22
-q23,Pregunta 23
-q24,Pregunta 24
-q25,Pregunta 25
-q26,Pregunta 26
-q27,Pregunta 27
+﻿columna,descripcion
+pais,País de la evaluación. Se usa para construir el nombre del territorio.
+ciudad,Ciudad de la evaluación. Se usa para construir el nombre del territorio.
+fecha,Fecha de evaluación o fecha de envío.
+q1,Pregunta 1. Selección múltiple.
+q2,Pregunta 2. Selección única ordinal.
+q3,Pregunta 3. Selección única ordinal.
+q4,Pregunta 4. Selección múltiple.
+q5,Pregunta 5. Selección múltiple.
+q6,Pregunta 6. Selección múltiple.
+q7,Cobertura sintetizada de conectividad. El dashboard usa esta columna para scoring.
+q7_urbana,Cobertura en zona urbana. Columna auxiliar informativa.
+q7_rural,Cobertura en zona rural. Columna auxiliar informativa.
+q8,Pregunta 8. Selección múltiple.
+q9,Pregunta 9. Selección múltiple.
+q10,Pregunta 10. Selección múltiple.
+q11,Pregunta 11. Selección única ordinal.
+q12,Pregunta 12. Selección múltiple.
+q13,Pregunta 13. Selección múltiple.
+q14,Pregunta 14. Selección única ordinal.
+q15,Pregunta 15. Selección única ordinal.
+q16,Pregunta 16. Selección múltiple.
+q17,Pregunta 17. Selección múltiple.
+q18,Pregunta 18. Selección única ordinal.
+q19,Pregunta 19. Selección única ordinal.
+q20,Pregunta 20. Selección múltiple.
+q21,Pregunta 21. Selección múltiple.
+q22,Pregunta 22. Selección única ordinal.
+q23,Pregunta 23. Selección múltiple.
+q24,"Pregunta 24. Ranking serializado con prioridades separadas por ';'. Se usa en alertas y hallazgos, no en el score."
+q25,Pregunta 25. Selección múltiple.
+q26,Pregunta 26. Selección múltiple.
+q27,Pregunta 27. Selección múltiple.
+extra_innovacion_gobierno,Campo extra narrativo. No entra al score; sirve para enriquecer recomendaciones.
+extra_economia_patrimonio_municipio,Campo extra narrativo. No entra al score; sirve para enriquecer recomendaciones.

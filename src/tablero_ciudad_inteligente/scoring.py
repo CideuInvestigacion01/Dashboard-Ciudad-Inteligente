@@ -33,7 +33,7 @@ def _parsear_multiple(valor: object) -> list[str]:
         return []
     if ";" in texto:
         return [parte.strip() for parte in texto.split(";") if parte.strip()]
-    return [parte.strip() for parte in texto.split(" ") if parte.strip()] if texto in {"1", "0"} else [texto]
+    return [texto]
 
 
 def _puntuar_multiple(pregunta: str, valor: object) -> float:
@@ -57,8 +57,37 @@ def _puntuar_multiple(pregunta: str, valor: object) -> float:
     return min(score, 1.0)
 
 
+def _puntuar_ordinal_q2_flexible(texto: str) -> float:
+    """Soporta tanto el formato antiguo como el nuevo wording del plan local."""
+    if not texto:
+        return 0.0
+
+    exacto = OPCIONES_ORDINALES.get("q2", {}).get(texto)
+    if exacto is not None:
+        return exacto
+
+    texto_norm = texto.lower()
+
+    if "no existe" in texto_norm:
+        return 0.0
+    if "inicial" in texto_norm or "formulación" in texto_norm or "formulacion" in texto_norm:
+        return 0.25
+    if "vigente" in texto_norm or "acciones definidas" in texto_norm:
+        return 0.5
+    if "actualizado periódicamente" in texto_norm or "actualizado periodicamente" in texto_norm:
+        if "seguimiento" in texto_norm or "evaluación" in texto_norm or "evaluacion" in texto_norm:
+            return 1.0
+        return 0.75
+
+    return 0.0
+
+
 def _puntuar_ordinal(pregunta: str, valor: object) -> float:
     texto = _a_texto(valor)
+
+    if pregunta == "q2":
+        return _puntuar_ordinal_q2_flexible(texto)
+
     return OPCIONES_ORDINALES.get(pregunta, {}).get(texto, 0.0)
 
 

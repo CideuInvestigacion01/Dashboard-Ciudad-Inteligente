@@ -8,54 +8,19 @@ from pathlib import Path
 
 import pandas as pd
 
+from tablero_ciudad_inteligente.config import PREGUNTAS_KOBO_ALIASES
 
-PREGUNTAS_KOBO = {
-    "q1": "¿Cuál de los siguientes apartados describe mejor la estrategia de transformación digital / ciudad inteligente local?",
-    "q2": "¿Cuál de los siguientes supuestos describe mejor la situación de la estrategia o plan formal de ciudades inteligentes?",
-    "q3": "¿Cuál de los siguientes supuestos describe mejor la estructura institucional que gestiona la transición digital?",
-    "q4": "¿Qué hitos relevantes se desarrollaron en el último año en materia de transición digital?",
-    "q5": "¿Con cuáles de las siguientes acciones o programas cuenta actualmente la administración local?",
-    "q6": "¿Qué mecanismos de gobernanza y coordinación existen actualmente?",
-    "q7": "¿Cuál es la cobertura aproximada de servicios de internet en zona urbana y rural del municipio?",
-    "q8": "¿Qué tipo de servicio está disponible en el municipio?",
-    "q9": "¿Con cuáles plataformas digitales propias cuenta actualmente el municipio?",
-    "q10": "¿Qué tecnologías se aplican o han sido aplicadas en el ámbito local?",
-    "q11": "¿Cuál es el método más común para incorporar capital humano en temas de transición digital?",
-    "q12": "¿Percibe la ciudadanía el trabajo en temas de tecnología, transición digital y datos en el servicio público?",
-    "q13": "¿Qué mecanismos o políticas existen para la gestión y protección de datos municipales?",
-    "q14": "¿Cómo se encuentra el nivel de gestión de datos urbanos (calidad, interoperabilidad, accesibilidad)?",
-    "q15": "¿Existen marcos locales sobre uso ético de IA, algoritmos o automatización?",
-    "q16": "¿Qué mecanismos de participación digital existen?",
-    "q17": "¿Qué acciones se realizan para reducir la brecha digital?",
-    "q18": "¿Qué tan accesibles son los servicios digitales para grupos vulnerables?",
-    "q19": "¿Cómo se vincula la estrategia digital con la economía creativa y el patrimonio cultural?",
-    "q20": "¿Qué proyectos concretos se han realizado en este ámbito?",
-    "q21": "¿Cómo se financian las iniciativas de transición digital?",
-    "q22": "¿Hay continuidad presupuestaria en los proyectos digitales?",
-    "q23": "¿Qué alianzas han sido clave en el proceso de transición digital?",
-    "q24": "¿Cuál es el principal impedimento para la continuidad de las políticas de transición digital?",
-    "q25": "¿Cuáles han sido los principales obstáculos en el proceso de transición digital?",
-    "q26": "¿Cuáles son los desafíos actuales para avanzar hacia una ciudad inteligente?",
-    "q27": "¿Qué factores han sido críticos para los avances logrados hasta ahora?",
+
+Q7_ORDEN = {
+    "Menos de 50%": 0,
+    "Entre 50% y 70%": 1,
+    "Entre 70% y 90%": 2,
+    "Total o casi total (+90%)": 3,
 }
 
-COLUMNAS_PAIS = [
-    "país",
-    "pais",
-    "country",
-    "nombre del país",
-    "nombre del pais",
-]
 
-COLUMNAS_CIUDAD = [
-    "ciudad",
-    "city",
-    "municipio",
-    "nombre de la ciudad",
-    "nombre del municipio",
-]
-
-COLUMNAS_IDENTIDAD = [
+COLUMNAS_FECHA = ["fecha", "submission_time", "_submission_time", "start", "end"]
+COLUMNAS_IDENTIDAD_FALLBACK = [
     "territorio",
     "entidad",
     "nombre",
@@ -67,18 +32,16 @@ COLUMNAS_IDENTIDAD = [
     "_submitted_by",
 ]
 
-COLUMNAS_FECHA = ["fecha", "submission_time", "_submission_time", "start", "end"]
-
 
 def _leer_csv(path: Path) -> pd.DataFrame:
-    """Lee CSV detectando automáticamente el separador más probable."""
-    muestra = path.read_text(encoding="utf-8-sig", errors="ignore")[:5000]
+    """Lee CSV detectando el separador más probable."""
+    muestra = path.read_text(encoding="utf-8-sig", errors="ignore")[:10000]
     try:
-        dialect = csv.Sniffer().sniff(muestra, delimiters=",;\t|")
+        dialect = csv.Sniffer().sniff(muestra, delimiters=";,|\t")
         sep = dialect.delimiter
     except csv.Error:
-        sep = ";" if muestra.count(";") > muestra.count(",") else ","
-    return pd.read_csv(path, sep=sep)
+        sep = ";"
+    return pd.read_csv(path, sep=sep, quotechar='"')
 
 
 def cargar_archivo(path: str | Path) -> pd.DataFrame:
@@ -100,26 +63,17 @@ def _normalizar_texto(texto: str) -> str:
     return texto
 
 
-def _texto_limpio(valor: object) -> str:
+def _a_texto(valor: object) -> str:
     if pd.isna(valor):
         return ""
     return str(valor).strip()
 
 
-def _renombrar_desde_kobo(nuevo: pd.DataFrame) -> pd.DataFrame:
-    """Renombra columnas del export de Kobo con labels a q1..q27 si aplica."""
-    mapeo: dict[str, str] = {}
-    columnas_normalizadas = {_normalizar_texto(col): col for col in nuevo.columns}
-
-    for codigo, pregunta in PREGUNTAS_KOBO.items():
-        clave = _normalizar_texto(pregunta)
-        columna_real = columnas_normalizadas.get(clave)
-        if columna_real:
-            mapeo[columna_real] = codigo
-
-    if mapeo:
-        nuevo = nuevo.rename(columns=mapeo)
-    return nuevo
+def _es_verdadero(valor: object) -> bool:
+    if pd.isna(valor):
+        return False
+    texto = str(valor).strip().lower()
+    return texto in {"1", "true", "yes", "sí", "si", "x"}
 
 
 def _buscar_columna(df: pd.DataFrame, candidatas: list[str]) -> str | None:
@@ -131,10 +85,97 @@ def _buscar_columna(df: pd.DataFrame, candidatas: list[str]) -> str | None:
     return None
 
 
+def _buscar_columna_alias(df: pd.DataFrame, alias_key: str) -> str | None:
+    return _buscar_columna(df, PREGUNTAS_KOBO_ALIASES.get(alias_key, []))
+
+
+def _buscar_subcolumnas_opciones(df: pd.DataFrame, alias_key: str) -> list[str]:
+    principales = PREGUNTAS_KOBO_ALIASES.get(alias_key, [])
+    columnas = []
+
+    for col in df.columns:
+        col_norm = _normalizar_texto(col)
+        for principal in principales:
+            principal_norm = _normalizar_texto(principal)
+            if col_norm.startswith(principal_norm + "/"):
+                columnas.append(col)
+                break
+
+    return columnas
+
+
+def _extraer_respuesta_unica(df: pd.DataFrame, alias_key: str) -> pd.Series:
+    col = _buscar_columna_alias(df, alias_key)
+    if col:
+        return df[col].apply(_a_texto)
+    return pd.Series([""] * len(df), index=df.index)
+
+
+def _extraer_respuesta_multiple(df: pd.DataFrame, alias_key: str) -> pd.Series:
+    opcion_cols = _buscar_subcolumnas_opciones(df, alias_key)
+
+    if opcion_cols:
+        valores = []
+        for _, fila in df[opcion_cols].iterrows():
+            seleccionadas = []
+            for col in opcion_cols:
+                if _es_verdadero(fila[col]):
+                    seleccionadas.append(col.split("/", 1)[1].strip())
+            valores.append(";".join(seleccionadas))
+        return pd.Series(valores, index=df.index)
+
+    col = _buscar_columna_alias(df, alias_key)
+    if col:
+        return df[col].apply(_a_texto)
+
+    return pd.Series([""] * len(df), index=df.index)
+
+
+def _sintetizar_q7(df: pd.DataFrame) -> tuple[pd.Series, pd.Series, pd.Series]:
+    urbana = _extraer_respuesta_unica(df, "q7_urbana")
+    rural = _extraer_respuesta_unica(df, "q7_rural")
+
+    sintetica = []
+    for u, r in zip(urbana, rural):
+        if u and r:
+            valor = u if Q7_ORDEN.get(u, 99) <= Q7_ORDEN.get(r, 99) else r
+            sintetica.append(valor)
+        elif u:
+            sintetica.append(u)
+        elif r:
+            sintetica.append(r)
+        else:
+            sintetica.append("")
+
+    return pd.Series(sintetica, index=df.index), urbana, rural
+
+
+def _sintetizar_q24(df: pd.DataFrame) -> pd.Series:
+    rank_cols = [
+        _buscar_columna_alias(df, "q24_rank_1"),
+        _buscar_columna_alias(df, "q24_rank_2"),
+        _buscar_columna_alias(df, "q24_rank_3"),
+        _buscar_columna_alias(df, "q24_rank_4"),
+        _buscar_columna_alias(df, "q24_rank_5"),
+    ]
+
+    valores = []
+    for _, fila in df.iterrows():
+        prioridades = []
+        for col in rank_cols:
+            if col:
+                texto = _a_texto(fila[col])
+                if texto:
+                    prioridades.append(texto)
+        valores.append(";".join(prioridades))
+
+    return pd.Series(valores, index=df.index)
+
+
 def _construir_nombre_territorio(pais: str, ciudad: str, fallback: str) -> str:
-    pais = _texto_limpio(pais)
-    ciudad = _texto_limpio(ciudad)
-    fallback = _texto_limpio(fallback)
+    pais = _a_texto(pais)
+    ciudad = _a_texto(ciudad)
+    fallback = _a_texto(fallback)
 
     if pais and ciudad:
         return f"{pais} - {ciudad}"
@@ -148,64 +189,86 @@ def _construir_nombre_territorio(pais: str, ciudad: str, fallback: str) -> str:
 
 
 def _agregar_columnas_base(df: pd.DataFrame) -> pd.DataFrame:
-    """Asegura columnas base para identificar país, ciudad, territorio y fecha."""
     nuevo = df.copy()
 
-    if "pais" not in nuevo.columns:
-        col_pais = _buscar_columna(nuevo, COLUMNAS_PAIS)
-        nuevo["pais"] = (
-            nuevo[col_pais].fillna("").astype(str).str.strip()
-            if col_pais
-            else ""
-        )
+    if "pais" in nuevo.columns:
+        nuevo["pais"] = nuevo["pais"].apply(_a_texto)
+    else:
+        col_pais = _buscar_columna_alias(nuevo, "pais")
+        nuevo["pais"] = nuevo[col_pais].apply(_a_texto) if col_pais else ""
 
-    if "ciudad" not in nuevo.columns:
-        col_ciudad = _buscar_columna(nuevo, COLUMNAS_CIUDAD)
-        nuevo["ciudad"] = (
-            nuevo[col_ciudad].fillna("").astype(str).str.strip()
-            if col_ciudad
-            else ""
-        )
+    if "ciudad" in nuevo.columns:
+        nuevo["ciudad"] = nuevo["ciudad"].apply(_a_texto)
+    else:
+        col_ciudad = _buscar_columna_alias(nuevo, "ciudad")
+        nuevo["ciudad"] = nuevo[col_ciudad].apply(_a_texto) if col_ciudad else ""
 
-    col_fallback = _buscar_columna(nuevo, COLUMNAS_IDENTIDAD)
-
-    if "entidad" not in nuevo.columns:
+    if "entidad" in nuevo.columns:
+        fallback_series = nuevo["entidad"].apply(_a_texto)
+    else:
+        col_fallback = _buscar_columna(nuevo, COLUMNAS_IDENTIDAD_FALLBACK)
         if col_fallback:
-            fallback_series = nuevo[col_fallback].fillna("").astype(str).str.strip()
+            fallback_series = nuevo[col_fallback].apply(_a_texto)
         else:
             fallback_series = pd.Series([""] * len(nuevo), index=nuevo.index)
 
-        nuevo["entidad"] = [
-            _construir_nombre_territorio(
-                pais=nuevo.at[idx, "pais"],
-                ciudad=nuevo.at[idx, "ciudad"],
-                fallback=fallback_series.at[idx],
-            )
-            for idx in nuevo.index
-        ]
+    nuevo["entidad"] = [
+        _construir_nombre_territorio(
+            pais=nuevo.at[idx, "pais"],
+            ciudad=nuevo.at[idx, "ciudad"],
+            fallback=fallback_series.at[idx],
+        )
+        for idx in nuevo.index
+    ]
 
-        if not col_fallback:
-            nuevo["entidad"] = [
-                valor if valor != "Observación sin nombre" else f"Observación {i + 1}"
-                for i, valor in enumerate(nuevo["entidad"].tolist())
-            ]
+    if "fecha" in nuevo.columns:
+        nuevo["fecha"] = nuevo["fecha"].apply(_a_texto)
     else:
-        nuevo["entidad"] = nuevo["entidad"].fillna("").astype(str).str.strip()
-        nuevo["entidad"] = [
-            _construir_nombre_territorio(
-                pais=nuevo.at[idx, "pais"],
-                ciudad=nuevo.at[idx, "ciudad"],
-                fallback=nuevo.at[idx, "entidad"],
-            )
-            for idx in nuevo.index
-        ]
-
-    if "fecha" not in nuevo.columns:
         col_fecha = _buscar_columna(nuevo, COLUMNAS_FECHA)
         if col_fecha:
-            nuevo["fecha"] = nuevo[col_fecha].astype(str)
+            nuevo["fecha"] = nuevo[col_fecha].apply(_a_texto)
         else:
             nuevo["fecha"] = "Sin fecha"
+
+    return nuevo
+
+
+def _es_formato_interno(df: pd.DataFrame) -> bool:
+    columnas_q = [f"q{i}" for i in range(1, 28)]
+    presentes = sum(1 for col in columnas_q if col in df.columns)
+    return presentes >= 20
+
+
+def _normalizar_formato_interno(df: pd.DataFrame) -> pd.DataFrame:
+    """Mantiene intacto el formato interno del dashboard y completa columnas base."""
+    nuevo = df.copy()
+
+    for col in ["pais", "ciudad", "fecha", "q7", "q7_urbana", "q7_rural", "q24",
+                "extra_innovacion_gobierno", "extra_economia_patrimonio_municipio"]:
+        if col in nuevo.columns:
+            nuevo[col] = nuevo[col].apply(_a_texto)
+
+    return _agregar_columnas_base(nuevo)
+
+
+def _mapear_respuestas(df: pd.DataFrame) -> pd.DataFrame:
+    nuevo = df.copy()
+
+    multiples = ["q1", "q4", "q5", "q6", "q8", "q9", "q10", "q12", "q13", "q16", "q17", "q20", "q21", "q23", "q25", "q26", "q27"]
+    unicas = ["q2", "q3", "q11", "q14", "q15", "q18", "q19", "q22"]
+
+    for q in multiples:
+        nuevo[q] = _extraer_respuesta_multiple(nuevo, q)
+
+    for q in unicas:
+        nuevo[q] = _extraer_respuesta_unica(nuevo, q)
+
+    nuevo["q7"], nuevo["q7_urbana"], nuevo["q7_rural"] = _sintetizar_q7(nuevo)
+    nuevo["q24"] = _sintetizar_q24(nuevo)
+
+    # Extras narrativos, no usados en scoring
+    nuevo["extra_innovacion_gobierno"] = _extraer_respuesta_multiple(nuevo, "extra_innovacion_gobierno")
+    nuevo["extra_economia_patrimonio_municipio"] = _extraer_respuesta_multiple(nuevo, "extra_economia_patrimonio_municipio")
 
     return nuevo
 
@@ -213,9 +276,12 @@ def _agregar_columnas_base(df: pd.DataFrame) -> pd.DataFrame:
 def normalizar_columnas(df: pd.DataFrame) -> pd.DataFrame:
     """Normaliza columnas y adapta formatos conocidos del instrumento."""
     nuevo = df.copy()
-    nuevo.columns = [str(col).strip().lower() for col in nuevo.columns]
-    nuevo = _renombrar_desde_kobo(nuevo)
+
+    if _es_formato_interno(nuevo):
+        return _normalizar_formato_interno(nuevo)
+
     nuevo = _agregar_columnas_base(nuevo)
+    nuevo = _mapear_respuestas(nuevo)
     return nuevo
 
 
@@ -229,9 +295,9 @@ def construir_etiquetas_evaluacion(df: pd.DataFrame) -> list[str]:
 
     base_labels = []
     for _, fila in df.iterrows():
-        pais = _texto_limpio(fila.get("pais", ""))
-        ciudad = _texto_limpio(fila.get("ciudad", ""))
-        entidad = _texto_limpio(fila.get("entidad", ""))
+        pais = _a_texto(fila.get("pais", ""))
+        ciudad = _a_texto(fila.get("ciudad", ""))
+        entidad = _a_texto(fila.get("entidad", ""))
 
         if pais and ciudad:
             base = f"{pais} - {ciudad}"

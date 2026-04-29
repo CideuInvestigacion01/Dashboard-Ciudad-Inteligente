@@ -13,7 +13,12 @@ from tablero_ciudad_inteligente.charts import (
     grafica_radar_gobierno_datos,
     tabla_recomendaciones,
 )
-from tablero_ciudad_inteligente.config import MENSAJES_NIVEL_GLOBAL, TEXTOS_APP
+from tablero_ciudad_inteligente.config import (
+    BIENVENIDA_CONFIG,
+    EXPLICACION_DIMENSIONES,
+    MENSAJES_NIVEL_GLOBAL,
+    TEXTOS_APP,
+)
 from tablero_ciudad_inteligente.data_loader import (
     cargar_archivo,
     construir_etiquetas_evaluacion,
@@ -35,8 +40,68 @@ def _csv_recomendaciones(resultado) -> bytes:
     return df_recomendaciones.to_csv(index=False).encode("utf-8-sig")
 
 
+def render_bienvenida() -> None:
+    st.title(BIENVENIDA_CONFIG["titulo"])
+    st.caption(BIENVENIDA_CONFIG["subtitulo"])
+
+    for parrafo in BIENVENIDA_CONFIG["introduccion"]:
+        st.write(parrafo)
+
+    st.markdown(BIENVENIDA_CONFIG["seccion_que_hace"])
+    for item in BIENVENIDA_CONFIG["que_hace"]:
+        st.write(f"- {item}")
+
+    st.markdown(BIENVENIDA_CONFIG["seccion_como_se_calcula"])
+    for item in BIENVENIDA_CONFIG["como_se_calcula"]:
+        st.write(f"- {item}")
+
+    st.markdown(BIENVENIDA_CONFIG["tipos_pregunta_titulo"])
+    for tipo in BIENVENIDA_CONFIG["tipos_pregunta"]:
+        st.markdown(f"**{tipo['nombre']}**")
+        st.write(tipo["descripcion"])
+
+    st.info(BIENVENIDA_CONFIG["nota_q24"])
+
+    st.markdown(BIENVENIDA_CONFIG["seccion_dimensiones"])
+    for _, info in EXPLICACION_DIMENSIONES.items():
+        st.markdown(f"### {info['nombre']} ({info['acronimo']})")
+        st.write(info["descripcion"])
+        st.write(f"**Preguntas que la integran:** {', '.join(info['preguntas_etiqueta'])}")
+
+    st.markdown(BIENVENIDA_CONFIG["seccion_niveles"])
+    for nivel in BIENVENIDA_CONFIG["niveles"]:
+        st.markdown(f"### {nivel['nivel']}")
+        st.write(f"**Rango:** {nivel['rango']}")
+        st.write(nivel["descripcion"])
+
+    st.markdown(BIENVENIDA_CONFIG["seccion_graficas"])
+    for grafica in BIENVENIDA_CONFIG["graficas"]:
+        st.markdown(f"### {grafica['titulo']}")
+        st.write(f"**Cómo se construye:** {grafica['como_se_construye']}")
+        st.write(f"**Cómo se interpreta:** {grafica['como_se_interpreta']}")
+
+    st.markdown(BIENVENIDA_CONFIG["seccion_ejemplo"])
+    for item in BIENVENIDA_CONFIG["ejemplo"]:
+        st.write(f"- {item}")
+
+    st.markdown(BIENVENIDA_CONFIG["seccion_uso"])
+    for item in BIENVENIDA_CONFIG["uso"]:
+        st.write(f"- {item}")
+
+
 st.title(TEXTOS_APP["main_title"])
 st.caption(TEXTOS_APP["main_caption"])
+
+with st.sidebar:
+    st.markdown(TEXTOS_APP["sidebar_nav_title"])
+    pagina = st.radio(
+        TEXTOS_APP["sidebar_nav_label"],
+        options=[TEXTOS_APP["sidebar_nav_home"], TEXTOS_APP["sidebar_nav_dashboard"]],
+    )
+
+if pagina == TEXTOS_APP["sidebar_nav_home"]:
+    render_bienvenida()
+    st.stop()
 
 with st.sidebar:
     st.markdown(TEXTOS_APP["sidebar_data_title"])

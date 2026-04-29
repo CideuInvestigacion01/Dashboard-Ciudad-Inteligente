@@ -14,6 +14,10 @@ TEXTOS_APP = {
     "page_title": "Tablero de Ciudad Inteligente",
     "main_title": "Tablero de Autoevaluación de Transición Digital y Ciudades Inteligentes",
     "main_caption": "Diagnóstico visual del estado de madurez digital de una ciudad a partir de respuestas de encuesta.",
+    "sidebar_nav_title": "### Navegación",
+    "sidebar_nav_label": "Ir a",
+    "sidebar_nav_home": "Inicio",
+    "sidebar_nav_dashboard": "Tablero",
     "sidebar_data_title": "### Fuente de datos",
     "sidebar_uploader_label": "Sube un CSV o XLSX exportado desde KoboToolbox",
     "sidebar_security_title": "### Seguridad recomendada",
@@ -45,6 +49,102 @@ MENSAJES_NIVEL_GLOBAL = {
     "Emergente": "El territorio muestra avances aislados o parciales. La prioridad es consolidar capacidades y continuidad.",
     "En consolidación": "El territorio cuenta con bases importantes. El siguiente paso es mejorar interoperabilidad, inclusión y sostenibilidad.",
     "Avanzado": "El territorio presenta un perfil avanzado. Conviene pasar a monitoreo continuo, evidencia de impacto y mejora fina.",
+}
+
+
+# =========================
+# Página de bienvenida
+# =========================
+
+BIENVENIDA_CONFIG = {
+    "titulo": "Bienvenida",
+    "subtitulo": "Guía breve para entender el instrumento y leer los resultados del tablero",
+    "introduccion": [
+        "La presente matriz de autoevaluación forma parte central de la Caja de Herramientas de Autoevaluación para Ciudades Inteligentes en Iberoamérica, desarrollada como resultado estratégico de la investigación Transición Digital a Ciudades Inteligentes en Iberoamérica como parte del programa “El Centro Histórico de La Habana hacia un modelo de ciudad inteligente con énfasis en el fomento de la economía creativa” desarrollado en colaboración entre el CIDEU y la Oficina del Historiador de la Ciudad de La Habana con financiamiento de la Unión Europea y el Ayuntamiento de Barcelona.",
+        "Su objetivo es ofrecer a los gobiernos locales un instrumento práctico, sistemático y contextualizado que les permita analizar el estado actual de sus procesos de transición digital y desarrollo de ciudades inteligentes, considerando las particularidades institucionales, tecnológicas y socioeconómicas de cada territorio.",
+        "El diseño de las preguntas responde a un enfoque metodológico cualitativo–cuantitativo, basado en la sistematización de entrevistas semiestructuradas realizadas a actores clave del ámbito gubernamental local, así como en la revisión de marcos internacionales y experiencias regionales.",
+        "El instrumento de autoevaluación está constituido por un conjunto de preguntas cerradas y de opción múltiple que permiten identificar patrones, brechas, avances y áreas prioritarias de intervención en dimensiones clave como la gobernanza digital, la infraestructura tecnológica, la modernización de los servicios públicos, la participación ciudadana, la equidad digital, la economía creativa y la gestión de datos urbanos.",
+        "La autoevaluación no pretende establecer rankings ni comparaciones normativas entre ciudades, sino funcionar como una herramienta de diagnóstico reflexivo y orientador, promoviendo la generación de conocimiento situado y la toma de decisiones informada.",
+        "Al facilitar la identificación de niveles diferenciados de desarrollo y capacidades, este instrumento busca fortalecer la planificación estratégica local, fomentar la mejora continua y apoyar la construcción de rutas de acción adaptadas a los distintos contextos urbanos de Iberoamérica, contribuyendo así a una transición digital más inclusiva, sostenible y con objetivos claros y diferenciados.",
+    ],
+    "seccion_que_hace": "## ¿Qué hace este tablero?",
+    "que_hace": [
+        "Este tablero transforma las respuestas de la autoevaluación en puntajes y visualizaciones que ayudan a identificar fortalezas, brechas y prioridades de acción.",
+        "Los resultados están organizados por dimensiones temáticas para facilitar la lectura y apoyar conversaciones de planeación, mejora continua y toma de decisiones.",
+    ],
+    "seccion_como_se_calcula": "## ¿Cómo se calcula el porcentaje?",
+    "como_se_calcula": [
+        "Cada pregunta se transforma primero a una escala de 0 a 1.",
+        "Después, los resultados de las preguntas de una misma dimensión se promedian.",
+        "Ese promedio se multiplica por 100 para obtener el puntaje de la dimensión.",
+        "Finalmente, el puntaje global se calcula como el promedio simple de todas las dimensiones.",
+    ],
+    "tipos_pregunta_titulo": "### Tipos de pregunta usados en el cálculo",
+    "tipos_pregunta": [
+        {
+            "nombre": "Preguntas de selección única ordinal",
+            "descripcion": "Son preguntas donde las opciones representan distintos niveles de avance. A cada opción se le asigna un valor entre 0 y 1 según su nivel de desarrollo.",
+        },
+        {
+            "nombre": "Preguntas de selección múltiple",
+            "descripcion": "Se calcula la proporción de opciones seleccionadas respecto al total de opciones válidas de esa pregunta. Si aparece una opción como “Ninguna de las anteriores”, el puntaje de esa pregunta se considera 0.",
+        },
+    ],
+    "nota_q24": "La pregunta q24 sobre priorización de obstáculos no entra al puntaje global. Actualmente se usa para generar alertas y hallazgos.",
+    "seccion_dimensiones": "## ¿Cómo está construida cada dimensión?",
+    "seccion_niveles": "## ¿Qué significa cada nivel?",
+    "niveles": [
+        {
+            "nivel": "Inicial",
+            "rango": "Menor a 25 puntos",
+            "descripcion": "Capacidades muy limitadas o fragmentadas. Todavía faltan bases institucionales, tecnológicas o de coordinación.",
+        },
+        {
+            "nivel": "Emergente",
+            "rango": "De 25 a menos de 50 puntos",
+            "descripcion": "Existen avances aislados o parciales. Hay iniciativas en marcha, pero todavía no están suficientemente consolidadas.",
+        },
+        {
+            "nivel": "En consolidación",
+            "rango": "De 50 a menos de 75 puntos",
+            "descripcion": "Existen bases importantes, estructuras o programas en funcionamiento. El reto principal es mejorar integración, continuidad e inclusión.",
+        },
+        {
+            "nivel": "Avanzado",
+            "rango": "75 puntos o más",
+            "descripcion": "El territorio muestra un desarrollo más robusto. El siguiente paso es fortalecer monitoreo, evidencia de impacto y mejora continua.",
+        },
+    ],
+    "seccion_graficas": "## ¿Cómo se construyen y cómo se leen las gráficas?",
+    "graficas": [
+        {
+            "titulo": "Puntaje por dimensión",
+            "como_se_construye": "Esta gráfica usa el puntaje final de cada dimensión. Cada barra representa el promedio de las preguntas que pertenecen a esa dimensión.",
+            "como_se_interpreta": "Mientras más alta es la barra, mayor es el nivel de desarrollo reportado en esa dimensión.",
+        },
+        {
+            "titulo": "Radar general de madurez digital",
+            "como_se_construye": "Esta gráfica usa los mismos puntajes por dimensión que la gráfica de barras, pero los organiza en forma radial usando los acrónimos de cada dimensión.",
+            "como_se_interpreta": "Una figura más amplia y equilibrada sugiere un desarrollo más homogéneo entre dimensiones. Una figura irregular muestra contrastes entre áreas fuertes y áreas rezagadas.",
+        },
+        {
+            "titulo": "Radar de capacidades clave",
+            "como_se_construye": "Esta gráfica no usa todas las preguntas del instrumento. Se construye a partir de seis componentes clave: la estrategia o plan local de transformación digital, la conectividad, la gestión de datos urbanos, la accesibilidad de los servicios digitales para grupos vulnerables, la continuidad presupuestaria de los proyectos digitales y los factores que han sido críticos para los avances logrados hasta ahora.",
+            "como_se_interpreta": "Sirve para ver rápidamente cómo se comportan algunas capacidades consideradas centrales para la transición digital. Valores más altos muestran mayores avances reportados en cada componente, mientras que valores más bajos ayudan a identificar áreas prioritarias de atención.",
+        },
+    ],
+    "seccion_ejemplo": "## Ejemplo sencillo de lectura",
+    "ejemplo": [
+        "Si una dimensión obtiene 60 puntos, eso significa que su resultado promedio se ubica en el nivel “En consolidación”.",
+        "Si otra dimensión obtiene 30 puntos, eso indica un nivel “Emergente”, por lo que probablemente aparecerá entre las prioridades de mejora y podrá activar recomendaciones más urgentes.",
+        "Si en la gráfica radar algunas dimensiones tienen valores altos y otras muy bajos, eso no significa que el territorio esté mal en todo, sino que tiene un desarrollo desigual entre temas.",
+    ],
+    "seccion_uso": "## ¿Cómo usar esta página?",
+    "uso": [
+        "Primero revisa esta sección de bienvenida para entender la lógica general del tablero.",
+        "Después entra al apartado “Tablero” y carga un archivo exportado desde KoboToolbox o usa el ejemplo incluido.",
+        "Finalmente, revisa el puntaje global, las dimensiones, las alertas, las recomendaciones y las gráficas para interpretar el resultado.",
+    ],
 }
 
 
@@ -97,6 +197,91 @@ ACRONIMOS_DIMENSION = {
     "G": "OAR",
 }
 
+EXPLICACION_DIMENSIONES = {
+    "A": {
+        "nombre": "Visión Estratégica, Gobernanza y Acciones Gubernamentales",
+        "acronimo": "VEG",
+        "preguntas": ["q1", "q2", "q3", "q4", "q5", "q6"],
+        "preguntas_etiqueta": [
+            "Estrategia de transformación digital / ciudad inteligente local",
+            "Situación del plan local de transformación digital",
+            "Estructura institucional que gestiona la transición digital",
+            "Hitos recientes en transición digital",
+            "Acciones o programas actuales de la administración local",
+            "Mecanismos de gobernanza y coordinación",
+        ],
+        "descripcion": "Evalúa la existencia de estrategia, estructura institucional, hitos, acciones y mecanismos de coordinación para impulsar la transición digital.",
+    },
+    "B": {
+        "nombre": "Infraestructura, Capacidades Técnicas y Plataformas",
+        "acronimo": "ICTP",
+        "preguntas": ["q7", "q8", "q9", "q10", "q11", "q12"],
+        "preguntas_etiqueta": [
+            "Cobertura de servicios de internet",
+            "Tipos de servicio disponibles en el municipio",
+            "Plataformas digitales propias del municipio",
+            "Tecnologías aplicadas en el ámbito local",
+            "Método de incorporación de capital humano",
+            "Percepción ciudadana sobre el trabajo en tecnología, transición digital y datos",
+        ],
+        "descripcion": "Evalúa conectividad, servicios tecnológicos disponibles, plataformas, capacidades técnicas y condiciones institucionales para operar lo digital.",
+    },
+    "C": {
+        "nombre": "Gobernanza de Datos, Privacidad y Ética",
+        "acronimo": "GDPE",
+        "preguntas": ["q13", "q14", "q15"],
+        "preguntas_etiqueta": [
+            "Mecanismos o políticas para gestión y protección de datos",
+            "Nivel de gestión de datos urbanos",
+            "Marcos locales sobre uso ético de IA, algoritmos o automatización",
+        ],
+        "descripcion": "Evalúa políticas, prácticas y marcos relacionados con datos, privacidad, interoperabilidad y uso ético de tecnologías.",
+    },
+    "D": {
+        "nombre": "Participación Ciudadana y Equidad Digital",
+        "acronimo": "PCED",
+        "preguntas": ["q16", "q17", "q18"],
+        "preguntas_etiqueta": [
+            "Mecanismos de participación digital",
+            "Acciones para reducir la brecha digital",
+            "Accesibilidad de los servicios digitales para grupos vulnerables",
+        ],
+        "descripcion": "Evalúa mecanismos de participación digital, acciones para reducir brechas y nivel de accesibilidad de los servicios digitales.",
+    },
+    "E": {
+        "nombre": "Economía Creativa y Patrimonio",
+        "acronimo": "ECP",
+        "preguntas": ["q19", "q20"],
+        "preguntas_etiqueta": [
+            "Vinculación entre estrategia digital, economía creativa y patrimonio cultural",
+            "Proyectos concretos realizados en este ámbito",
+        ],
+        "descripcion": "Evalúa la relación entre estrategia digital, patrimonio cultural, creatividad y acciones concretas en ese ámbito.",
+    },
+    "F": {
+        "nombre": "Financiamiento, Sostenibilidad y Alianzas",
+        "acronimo": "FSA",
+        "preguntas": ["q21", "q22", "q23"],
+        "preguntas_etiqueta": [
+            "Fuentes de financiamiento de la transición digital",
+            "Continuidad presupuestaria de los proyectos digitales",
+            "Alianzas clave en el proceso de transición digital",
+        ],
+        "descripcion": "Evalúa fuentes de financiamiento, continuidad presupuestaria y alianzas clave para sostener iniciativas digitales.",
+    },
+    "G": {
+        "nombre": "Obstáculos, Aprendizajes y Recomendaciones",
+        "acronimo": "OAR",
+        "preguntas": ["q25", "q26", "q27"],
+        "preguntas_etiqueta": [
+            "Principales obstáculos del proceso de transición digital",
+            "Desafíos actuales para avanzar hacia una ciudad inteligente",
+            "Factores críticos para los avances logrados",
+        ],
+        "descripcion": "Evalúa obstáculos, desafíos actuales y factores que han sido importantes para los avances logrados.",
+    },
+}
+
 PREGUNTAS_DIMENSION = {
     "A": ["q1", "q2", "q3", "q4", "q5", "q6"],
     "B": ["q7", "q8", "q9", "q10", "q11", "q12"],
@@ -105,6 +290,134 @@ PREGUNTAS_DIMENSION = {
     "E": ["q19", "q20"],
     "F": ["q21", "q22", "q23"],
     "G": ["q25", "q26", "q27"],
+}
+
+
+# =========================
+# Alias de preguntas Kobo
+# =========================
+
+PREGUNTAS_KOBO_ALIASES = {
+    "pais": [
+        "País",
+        "Pais",
+    ],
+    "ciudad": [
+        "Ciudad",
+    ],
+    "q1": [
+        "¿Cuál de los siguientes apartados describe mejor la estrategia de transformación digital / ciudad inteligente local? (Seleccionar los que apliquen)",
+        "¿Cuál de los siguientes apartados describe mejor la estrategia de transformación digital / ciudad inteligente local?",
+    ],
+    "q2": [
+        "Si existe un Plan local de transformación digital, indique cuál de las siguientes opciones lo describe mejor (Seleccionar uno):",
+        "Si existe un plan local de transformación digital, indique cuál de las siguientes opciones lo describe mejor (Seleccionar uno):",
+    ],
+    "q3": [
+        "¿Cuál de los siguientes supuestos describe mejor la estructura institucional que gestiona la transición digital? (Seleccionar uno)",
+        "¿Cuál de los siguientes supuestos describe mejor la estructura institucional que gestiona la transición digital?",
+    ],
+    "q4": [
+        "¿Qué hitos relevantes se desarrollaron en el último año en materia de transición digital? (Seleccionar los que apliquen)",
+        "¿Qué hitos relevantes se desarrollaron en el último año en materia de transición digital?",
+    ],
+    "q5": [
+        "¿Con cuáles de las siguientes acciones o programas cuenta actualmente la administración local? (Seleccionar los que apliquen)",
+        "¿Con cuáles de las siguientes acciones o programas cuenta actualmente la administración local?",
+    ],
+    "q6": [
+        "¿Qué mecanismos de gobernanza y coordinación existen actualmente? (Seleccionar los que apliquen)",
+        "¿Qué mecanismos de gobernanza y coordinación existen actualmente?",
+    ],
+    "q7_urbana": [
+        "¿Cuál es la cobertura aproximada de servicios de internet en zona urbana del municipio? (Seleccionar uno)",
+        "¿Cuál es la cobertura aproximada de servicios de internet en zona urbana del municipio?",
+    ],
+    "q7_rural": [
+        "¿Cuál es la cobertura aproximada de servicios de internet en zona rural del municipio? (Seleccionar uno)",
+        "¿Cuál es la cobertura aproximada de servicios de internet en zona rural del municipio?",
+    ],
+    "q8": [
+        "¿Qué tipo de servicio está disponible en el municipio? (Seleccionar los que apliquen)",
+        "¿Qué tipo de servicio está disponible en el municipio?",
+    ],
+    "q9": [
+        "¿Con cuáles plataformas digitales propias cuenta actualmente el municipio? (Seleccionar los que apliquen)",
+        "¿Con cuáles plataformas digitales propias cuenta actualmente el municipio?",
+    ],
+    "q10": [
+        "¿Qué tecnologías se aplican o han sido aplicadas en el ámbito local? (Seleccionar los que apliquen)",
+        "¿Qué tecnologías se aplican o han sido aplicadas en el ámbito local?",
+    ],
+    "q11": [
+        "¿Cuál es el método más común para incorporar capital humano en temas de transición digital? (Seleccionar uno)",
+        "¿Cuál es el método más común para incorporar capital humano en temas de transición digital?",
+    ],
+    "q12": [
+        "¿Cómo percibe la ciudadanía el trabajo en temas de tecnología, transición digital y datos en el servicio público? (Seleccionar los que apliquen)",
+        "¿Percibe la ciudadanía el trabajo en temas de tecnología, transición digital y datos en el servicio público?",
+    ],
+    "q13": [
+        "¿Qué mecanismos o políticas existen para la gestión y protección de datos municipales?",
+    ],
+    "q14": [
+        "¿Cómo se encuentra el nivel de gestión de datos urbanos (calidad, interoperabilidad, accesibilidad)? (Seleccionar uno)",
+        "¿Cómo se encuentra el nivel de gestión de datos urbanos (calidad, interoperabilidad, accesibilidad)?",
+    ],
+    "q15": [
+        "¿Existen marcos locales sobre uso ético de IA, algoritmos o automatización? (Seleccionar uno)",
+        "¿Existen marcos locales sobre uso ético de IA, algoritmos o automatización?",
+    ],
+    "q16": [
+        "¿Qué mecanismos de participación digital existen? (Seleccionar los que apliquen)",
+        "¿Qué mecanismos de participación digital existen?",
+    ],
+    "q17": [
+        "¿Qué acciones se realizan para reducir la brecha digital? (Seleccionar los que apliquen)",
+        "¿Qué acciones se realizan para reducir la brecha digital?",
+    ],
+    "q18": [
+        "¿Qué tan accesibles son los servicios digitales para grupos vulnerables? (Seleccionar uno)",
+        "¿Qué tan accesibles son los servicios digitales para grupos vulnerables?",
+    ],
+    "q19": [
+        "¿Cómo se vincula la estrategia digital con la economía creativa y el patrimonio cultural? (Seleccionar uno)",
+        "¿Cómo se vincula la estrategia digital con la economía creativa y el patrimonio cultural?",
+    ],
+    "q20": [
+        "¿Qué proyectos concretos se han realizado en este ámbito?",
+    ],
+    "q21": [
+        "¿Cómo se financian las iniciativas de transición digital?",
+    ],
+    "q22": [
+        "¿Hay continuidad presupuestaria en los proyectos digitales?",
+    ],
+    "q23": [
+        "¿Qué alianzas han sido clave en el proceso de transición digital?",
+    ],
+    "q24_rank_1": ["1st choice"],
+    "q24_rank_2": ["2nd choice"],
+    "q24_rank_3": ["3rd choice"],
+    "q24_rank_4": ["4th choice"],
+    "q24_rank_5": ["5th choice"],
+    "q25": [
+        "¿Cuáles han sido los principales obstáculos en el proceso de transición digital?",
+    ],
+    "q26": [
+        "¿Cuáles son los desafíos actuales para avanzar hacia una ciudad inteligente?",
+    ],
+    "q27": [
+        "¿Qué factores han sido críticos para los avances logrados hasta ahora?",
+    ],
+    "extra_innovacion_gobierno": [
+        "¿Qué acciones existen para promover una cultura de innovación dentro del gobierno local?  (Seleccionar los que apliquen)",
+        "¿Qué acciones existen para promover una cultura de innovación dentro del gobierno local? (Seleccionar los que apliquen)",
+    ],
+    "extra_economia_patrimonio_municipio": [
+        "En relación con la economía creativa y el patrimonio, el municipio (Seleccionar los que apliquen):",
+        "En relación con la economía creativa y el patrimonio, el municipio (Seleccionar los que apliquen)",
+    ],
 }
 
 
@@ -118,7 +431,7 @@ OPCIONES_MULTIPLE = {
         "Existe una oficina / secretaría encargada de los temas de transformación digital.",
         "Existe un consejo / organismo ciudadano de transición digital.",
         "Existen proyectos, programas y/o acciones que trabajan en la transformación digital.",
-        "Existen plataformas de atención ciudadana, participación ciudadana, consulta de información SIG, monitoreo de acciones o proyectos en funcionamiento.",
+        "Existen plataformas de atención ciudadana, participación ciudadana, consulta de información en un Sistema de Información Geográfica (SIG, monitoreo de acciones o proyectos en funcionamiento.",
     ],
     "q4": [
         "Inauguración de un proyecto relevante (SIG, participación ciudadana, atención ciudadana u otros).",
@@ -132,8 +445,9 @@ OPCIONES_MULTIPLE = {
         "Plataforma digital de participación o atención ciudadana.",
         "Plataforma SIG para desarrollo urbano, servicios públicos o medio ambiente.",
         "Programas o acciones para disminuir la brecha digital en población vulnerable.",
-        "Plan o estrategia local de transición digital con consejo ciudadano.",
+        "Plan o estrategia local de transición digital.",
         "Transversalización digital del trabajo entre secretarías.",
+        "Observatorio de la ciudad (datos, visualizaciones, etc.)",
     ],
     "q6": [
         "Mesas de trabajo con sociedad civil, universidades, organismos públicos o ciudadanía.",
@@ -145,12 +459,12 @@ OPCIONES_MULTIPLE = {
         "4G/5G",
         "Servicio satelital",
         "Fibra óptica dedicada",
-        "Cobertura pública gratuita (parques, plazas, equipamientos)",
+        "Cobertura pública gratuita (parques, plazas.1, equipamientos)",
         "Otro",
     ],
     "q9": [
         "Desarrollo urbano (trámites de construcción, permisos)",
-        "Servicios públicos (iluminación, limpieza, recolección)",
+        "Servicios públicos (iluminación, limpieza.1, recolección)",
         "Trámites y pagos municipales",
         "Programas sociales y actividades municipales",
         "Seguridad",
@@ -159,9 +473,9 @@ OPCIONES_MULTIPLE = {
     "q10": [
         "Plataforma SIG y repositorios digitales",
         "Plataforma de trámites y atención ciudadana",
-        "Sensores urbanos (tráfico, calidad del aire, movilidad)",
+        "Sensores urbanos (tráfico, calidad del aire.1, movilidad)",
         "Sistemas de seguridad y respuesta en tiempo real",
-        "Modelación y escenarios prospectivos",
+        "Modelación y escenarios prospectivo",
         "Flujos de trabajo digitalizados entre secretarías",
     ],
     "q12": [
@@ -173,11 +487,11 @@ OPCIONES_MULTIPLE = {
     ],
     "q13": [
         "Comités de ética de datos",
-        "Política municipal de datos abiertos.",
+        "Política municipal de datos abiertos",
         "Licencias de datos abiertos sobre información municipal",
         "Protocolos o normativas regionales/nacionales de datos públicos",
         "Procesos de prevención de pérdida o fuga de datos",
-        "Avisos de privacidad de datos personales.",
+        "Avisos de privacidad de datos personales",
     ],
     "q16": [
         "Consultas públicas o referéndums digitales",
@@ -199,6 +513,7 @@ OPCIONES_MULTIPLE = {
         "Incubadoras o laboratorios creativos",
         "Plataformas para creadores locales basadas en datos abiertos",
         "Otro",
+        "Ninguno",
     ],
     "q21": [
         "Presupuesto municipal",
@@ -206,6 +521,7 @@ OPCIONES_MULTIPLE = {
         "Cooperación internacional",
         "Alianzas público-privadas",
         "Recursos propios o autogenerados",
+        "No existe financiamiento específico",
     ],
     "q23": [
         "Universidades o centros de investigación",
@@ -213,6 +529,7 @@ OPCIONES_MULTIPLE = {
         "Organizaciones de la sociedad civil",
         "Organismos internacionales",
         "Otros",
+        "No existen alianzas relevantes",
     ],
     "q25": [
         "Obstáculos técnicos",
@@ -245,6 +562,7 @@ OPCIONES_NULAS = {
     "q6": ["Ninguna de las anteriores."],
     "q17": ["Ninguna de las anteriores"],
     "q20": ["Ninguno"],
+    "q21": ["No existe financiamiento específico"],
     "q23": ["No existen alianzas relevantes"],
 }
 
@@ -259,6 +577,11 @@ OPCIONES_ORDINALES = {
         "Existe un plan o estrategia formal, pero no hay una oficina que le dé seguimiento.": 0.5,
         "Existe un plan o estrategia formal, proyectos y acciones gestionadas por una oficina especializada.": 0.75,
         "El plan o estrategia es parte de un proceso continuo de transición digital, gerenciado por una oficina especializada con acompañamiento ciudadano.": 1.0,
+        "No existe plan local de transformación digital": 0.0,
+        "Existe un plan inicial o en formulación": 0.25,
+        "Existe un plan vigente con acciones definidas": 0.5,
+        "Plan actualizado periódicamente": 0.75,
+        "Plan actualizado periódicamente y alineado a mecanismos de seguimiento y evaluación": 1.0,
     },
     "q3": {
         "No existe un equipo especializado, pero algunas secretarías cuentan con capital humano informalmente dedicado al tema.": 0.2,
@@ -401,6 +724,21 @@ RECOMENDACIONES_CONFIG = {
     "fallback_diagnostico": "El territorio muestra un perfil relativamente sólido en todas las dimensiones evaluadas.",
     "fallback_siguiente_paso": "Pasar de consolidación a monitoreo continuo con indicadores temporales, benchmarking y auditoría externa.",
     "fallback_literatura": "ISO 37122 + evaluación continua",
+    "narrative_priority_label": "Complementaria",
+}
+
+RECOMENDACIONES_NARRATIVAS_EXTRAS = {
+    "innovacion_gobierno_min_acciones": 2,
+    "innovacion_gobierno_dimension": "Innovación institucional",
+    "innovacion_gobierno_diagnostico": "Se observan pocas acciones orientadas a promover una cultura de innovación dentro del gobierno local.",
+    "innovacion_gobierno_siguiente_paso": "Impulsar mecanismos internos de innovación pública, como laboratorios, formación, incentivos, pilotos y espacios de aprendizaje interáreas.",
+    "innovacion_gobierno_literatura": "Innovación pública y transformación institucional",
+
+    "economia_patrimonio_min_acciones": 2,
+    "economia_patrimonio_dimension": "Economía creativa y patrimonio",
+    "economia_patrimonio_diagnostico": "Se observan pocas acciones concretas del municipio para vincular digitalización, patrimonio y economía creativa.",
+    "economia_patrimonio_siguiente_paso": "Fortalecer iniciativas que conecten patrimonio cultural, activación creativa, digitalización y plataformas de difusión o colaboración local.",
+    "economia_patrimonio_literatura": "Cultura digital local y desarrollo territorial",
 }
 
 

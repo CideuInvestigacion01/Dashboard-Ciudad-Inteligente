@@ -28,11 +28,17 @@ def test_puntuar_multiple_q5():
     assert score > 0.0
 
 
-def test_cargar_export_kobo_con_labels():
-    ruta = Path("/mnt/data/CIDEU_SMRT_V2_Autoevaluación_-_all_versions_-_labels_-_2026-04-14-21-02-31.csv")
+def test_cargar_export_kobo_con_nuevo_formato():
+    ruta = Path("/mnt/data/INSTRUMENTO_DE_AUTOEVALUACIÓN_DE_TRANSICIÓN_DIGITAL_Y_CIUDADES_INTELIGENTES_-_all_versions_-_labels_-_2026-04-29-15-08-52.csv")
     df = cargar_archivo(ruta)
-    assert "q1" in df.columns
-    assert "q27" in df.columns
+
+    assert "pais" in df.columns
+    assert "ciudad" in df.columns
     assert "entidad" in df.columns
+    assert "q1" in df.columns
+    assert "q7" in df.columns
+    assert "q24" in df.columns
+
     resultado = calcular_resultados(df.iloc[0])
-    assert resultado.ciudad
+    assert resultado.ciudad == "México - Ciudad de México"
+    assert resultado.puntaje_global >= 0
