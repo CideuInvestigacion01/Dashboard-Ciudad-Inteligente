@@ -39,16 +39,17 @@ TEXTOS_APP = {
     "recommendation_diagnostic_label": "Diagnóstico",
     "recommendation_next_step_label": "Siguiente paso",
     "recommendation_literature_label": "Literatura asociada",
+    "recommendation_case_studies_label": "Casos de referencia",
     "recommendations_download_button": "Descargar recomendaciones como CSV",
     "recommendations_download_filename": "recomendaciones.csv",
 }
 
 
 MENSAJES_NIVEL_GLOBAL = {
-    "Inicial": "El territorio se encuentra en una fase inicial de transición digital. Se recomienda construir bases institucionales y de infraestructura.",
-    "Emergente": "El territorio muestra avances aislados o parciales. La prioridad es consolidar capacidades y continuidad.",
-    "En consolidación": "El territorio cuenta con bases importantes. El siguiente paso es mejorar interoperabilidad, inclusión y sostenibilidad.",
-    "Avanzado": "El territorio presenta un perfil avanzado. Conviene pasar a monitoreo continuo, evidencia de impacto y mejora fina.",
+    "Inicial": "El territorio muestra avances aislados o parciales. La prioridad es consolidar capacidades y continuidad y reducir la fragmentación institucional. Fortalecer la coordinación interinstitucional y avanzar hacia interoperabilidad básica, integrando iniciativas existentes en una estrategia común.",
+    "Emergente": "El territorio muestra avances aislados o parciales. La prioridad es consolidar capacidades y continuidad y reducir la fragmentación institucional. Fortalecer la coordinación interinstitucional y avanzar hacia interoperabilidad básica, integrando iniciativas existentes en una estrategia común.",
+    "En consolidación": "El territorio cuenta con bases importantes en la integración de los elementos de una ciudad inteligente. El siguiente paso es mejorar interoperabilidad, inclusión y sostenibilidad. Profundizar en gobernanza de datos, evaluación de impacto y mecanismos de inclusión digital, incorporando métricas y monitoreo continuo.",
+    "Avanzado": "El territorio presenta un perfil avanzado de integración a la transicisión digital. Conviene pasar a monitoreo continuo, evidencia de impacto y mejora fina. De esta manera se podrá transitar hacia innovación basada en datos, auditoría algorítmica, y modelos de gobernanza participativa del dato",
 }
 
 
@@ -656,18 +657,18 @@ PRIORIZACION_OBSTACULOS = {
 ALERTAS_CONFIG = {
     "q14": {
         "threshold": 0.5,
-        "message": "La gobernanza de datos muestra un nivel bajo o fragmentado.",
+        "message": "La gobernanza de datos muestra un nivel bajo o fragmentado. Valorar el desarrollo de una política integral de datos que incluya estándares de interoperabilidad, protección de datos personales y mecanismos de apertura progresiva.",
     },
     "q18": {
         "threshold": 0.5,
-        "message": "La accesibilidad e inclusión digital requieren atención prioritaria.",
+        "message": "La accesibilidad e inclusión digital requieren atención prioritaria. Se recomienda implementar estrategias de inclusión digital territorializadas, con énfasis en conectividad asequible, alfabetización digital y diseño intuitivo y accesible.",
     },
     "q22": {
         "threshold": 0.5,
-        "message": "La continuidad presupuestaria es insuficiente para sostener la agenda digital.",
+        "message": "La continuidad presupuestaria es insuficiente para sostener la agenda digital. Explorar el establecimiento mecanismos de financiamiento multianual y diversificado (alianzas público-privadas, cooperación internacional, fondos urbanos, entre otros).",
     },
     "q24_top_n": 2,
-    "q24_message_template": "Obstáculo priorizado detectado: {prioridad}.",
+    "q24_message_template": "Obstáculo priorizado detectado: {prioridad}. Traducir el obstáculo en una acción concreta dentro de una hoja de ruta con responsables, tiempos y métricas de seguimiento.",
 }
 
 
@@ -678,38 +679,110 @@ ALERTAS_CONFIG = {
 RECOMENDACIONES_DIMENSION = {
     "A": {
         "dimension": "Visión estratégica y gobernanza",
-        "siguiente_paso": "Formalizar o fortalecer una estrategia de transición digital con responsables, metas y seguimiento intersecretarial.",
-        "literatura": "UN-Habitat - People-Centred Smart Cities",
+        "siguiente_paso": (
+            "Formalizar o fortalecer una estrategia de transición digital con responsables, metas y seguimiento intersecretarial. "
+            "Incorporar un enfoque de gobernanza multinivel y participación de actores locales (academia, sociedad civil), "
+            "evitando modelos centralizados y fomentando un ecosistema de transición digital."
+        ),
+        "casos_referencia": [
+            "Barcelona: plataforma Decidim como herramienta de gobernanza participativa.",
+            "Medellín: creación de Ruta N como modelo de gobernanza articulado entre Alcaldía y sector privado.",
+        ],
+        "literatura": [
+            "Gil-García, J. R., Zhang, J., & Puron-Cid, G. (2016). Conceptualizing smartness in government: An integrative and multi-dimensional view. Government Information Quarterly, 33(3), 524–534. https://doi.org/10.1016/j.giq.2016.03.002",
+            "Meijer, A., & Bolívar, M. P. R. (2016). Governing the smart city: A review of the literature on smart urban governance. International Review of Administrative Sciences, 82(2), 392–408. https://doi.org/10.1177/0020852314564308",
+            "ONU-Hábitat. (2022). People-centered smart cities playbook. Programa de las Naciones Unidas para los Asentamientos Humanos. https://unhabitat.org/programme/people-centered-smart-cities",
+        ],
     },
     "B": {
         "dimension": "Infraestructura y capacidades técnicas",
-        "siguiente_paso": "Priorizar conectividad, digitalización de trámites y fortalecimiento de capacidades técnicas internas.",
-        "literatura": "ISO 37122 + OECD Smart Cities and Inclusive Growth",
+        "siguiente_paso": (
+            "Priorizar conectividad, digitalización de trámites y fortalecimiento de capacidades técnicas internas. "
+            "Asegurar que la infraestructura esté alineada con las necesidades sociales de las comunidades "
+            "e integrar el fortalecimiento del talento digital local."
+        ),
+        "casos_referencia": [
+            "Mendoza: portal de datos abiertos y geoportal ciudadano.",
+            "Montevideo: Montevidata (observatorio y datos abiertos), plataforma de visualización y descarga de datos oficiales sobre ambiente, movilidad, cultura y servicios urbanos.",
+        ],
+        "literatura": [
+            "CAF. Banco de Desarrollo de América Latina. (2021). Transformación digital de los gobiernos subnacionales en América Latina. https://www.caf.com/es/conocimiento/visiones/2021/06/transformacion-digital-de-los-gobiernos-subnacionales-en-america-latina/",
+            "CEPAL. Comisión Económica para América Latina y el Caribe. (2014). La economía digital para el cambio estructural y la igualdad. Naciones Unidas. https://repositorio.cepal.org/handle/11362/36766",
+            "Mergel, I., Edelmann, N., & Haug, N. (2019). Defining digital transformation: Results from expert interviews. Government Information Quarterly, 36(4), 101385. https://doi.org/10.1016/j.giq.2019.06.002",
+        ],
     },
     "C": {
         "dimension": "Gobernanza de datos, privacidad y ética",
-        "siguiente_paso": "Definir política de datos, interoperabilidad mínima, privacidad y lineamientos de ética digital.",
-        "literatura": "OECD Smart City Data Governance",
+        "siguiente_paso": (
+            "Definir la política de gestión de datos, privacidad y lineamientos de ética digital para avanzar "
+            "hacia modelos de soberanía tecnológica y control del datos de forma segura y transparente."
+        ),
+        "casos_referencia": [
+            "Quito: procesos institucionalizados de calidad del dato, reuniones con custodios, validación formal y metas anuales.",
+            "Curitiba: Ley municipal de IA (2024) para regular uso de inteligencia artificial con ética y privacidad.",
+        ],
+        "literatura": [
+            "Janssen, M., Charalabidis, Y., & Zuiderwijk, A. (2012). Benefits, adoption barriers and myths of open data and open government. Information Systems Management, 29(4), 258–268.",
+            "OCDE. Organización para la Cooperación y el Desarrollo Económicos. (2020). Marco de política de gobierno digital de la OCDE. OECD Publishing. https://www.oecd.org",
+            "Wirtz, B. W., Weyerer, J. C., & Geyer, C. (2019). Artificial intelligence and the public sector—Applications and challenges. International Journal of Public Administration, 42(7), 596–615. https://doi.org/10.1080/01900692.2018.1498103",
+        ],
     },
     "D": {
         "dimension": "Participación ciudadana y equidad digital",
-        "siguiente_paso": "Ampliar mecanismos digitales de participación y accesibilidad para grupos vulnerables.",
-        "literatura": "UN-Habitat + OECD Inclusive Growth",
+        "siguiente_paso": (
+            "Ampliar mecanismos digitales de participación y accesibilidad para grupos vulnerables, "
+            "integrando la participación híbrida (digital y presencial) y habilitando espacios de co-creación "
+            "ciudadana en el diseño de las políticas públicas."
+        ),
+        "casos_referencia": [
+            "Mendoza: Comité de Gobernanza de Datos y Comité Local de Inteligencia Artificial (CLIA).",
+            "San Diego: Get It Done — plataforma de servicios municipales / atención ciudadana, trámites, solicitudes, mantenimiento urbano, reporte ciudadano y facilitación digital de servicios.",
+        ],
+        "literatura": [
+            "Criado, J. I., & Gil-García, J. R. (2019). Creating public value through smart technologies and strategies: From digital services to artificial intelligence. Government Information Quarterly, 36(4), 101404. https://doi.org/10.1016/j.giq.2019.101404",
+            "ONU-Hábitat. (2022). People-centered smart cities playbook. Programa de las Naciones Unidas para los Asentamientos Humanos. https://unhabitat.org/programme/people-centered-smart-cities",
+            "Wirtz, B. W., Weyerer, J. C., & Geyer, C. (2019). Artificial intelligence and the public sector—Applications and challenges. International Journal of Public Administration, 42(7), 596–615. https://doi.org/10.1080/01900692.2018.1498103",
+        ],
     },
     "E": {
         "dimension": "Economía creativa y patrimonio",
-        "siguiente_paso": "Conectar cultura, patrimonio y digitalización mediante plataformas, archivos y laboratorios creativos.",
-        "literatura": "UN-Habitat / agendas de cultura digital local",
+        "siguiente_paso": (
+            "Conectar cultura, patrimonio y digitalización mediante plataformas, archivos y laboratorios creativos. "
+            "Impulsar la creación de ecosistemas creativos locales como motores de innovación urbana y apropiación tecnológica."
+        ),
+        "casos_referencia": [],
+        "literatura": [
+            "UNESCO. Organización de las Naciones Unidas para la Educación, la Ciencia y la Cultura. (2013). Informe sobre la economía creativa: Ampliar las vías del desarrollo local. UNESCO. https://unesdoc.unesco.org",
+            "BID. Banco Interamericano de Desarrollo. (2017). La economía naranja: Una oportunidad infinita. BID. https://publications.iadb.org/publications/spanish/document/La-economia-naranja-Una-oportunidad-infinita.pdf",
+            "British Council. (2021). The missing link: Creative economy and inclusive development in Latin America. British Council. https://www.britishcouncil.org",
+            "Comunian, R., & Gilmore, A. (2016). Higher education and the creative economy: Creative graduates, knowledge transfer and regional impact debates. Geography Compass, 10(7), 391–402. https://doi.org/10.1111/gec3.12277",
+        ],
     },
     "F": {
         "dimension": "Financiamiento y alianzas",
-        "siguiente_paso": "Asegurar continuidad presupuestaria y construir alianzas con academia, sector privado y cooperación.",
-        "literatura": "OECD / estrategias de financiamiento urbano",
+        "siguiente_paso": (
+            "Asegurar continuidad presupuestaria y construir alianzas con academia, sector privado y cooperación. "
+            "Generar una red de financiamiento e incorporar modelos experimentales de obtención de recursos para la digitalización."
+        ),
+        "casos_referencia": [],
+        "literatura": [
+            "BID. Banco Interamericano de Desarrollo. (2022). Guía de transformación digital del gobierno. https://publications.iadb.org/es/guia-de-transformacion-digital-del-gobierno",
+            "KPMG. (2017). Smart cities: A roadmap for development. https://www.researchgate.net/publication/312106742_Smart_Cities_-_A_Roadmap_for_Development",
+            "McKinsey Global Institute. (2018). Smart cities: Digital solutions for a more livable future. https://www.mckinsey.com/~/media/mckinsey/business%20functions/operations/our%20insights/smart%20cities%20digital%20solutions%20for%20a%20more%20livable%20future/mgi-smart-cities-full-report.pdf",
+        ],
     },
     "G": {
         "dimension": "Obstáculos y aprendizajes",
-        "siguiente_paso": "Convertir obstáculos diagnosticados en una hoja de ruta priorizada con responsables y tiempos.",
-        "literatura": "Roadmapping institucional y mejora continua",
+        "siguiente_paso": (
+            "Convertir obstáculos diagnosticados en una hoja de ruta priorizada con responsables y tiempos. "
+            "Incorporar aprendizaje institucional continuo y evaluación adaptativa como parte del ciclo de política pública."
+        ),
+        "casos_referencia": [],
+        "literatura": [
+            "Mora, L., Bolici, R., & Deakin, M. (2017). The first two decades of smart-city research: A bibliometric analysis. Journal of Urban Technology, 24(1), 3–27. https://doi.org/10.1080/10630732.2017.1285123",
+            "Matus Ruiz, Maximino, Ramírez Autrán, Rodrigo. (2016). Ciudades Inteligentes en Iberoamérica; ejemplos de iniciativas desde el sector privado, la sociedad civil, el gobierno y la academia, Fondo de Información y Documentación para la Industria (INFOTEC), Ciudad de México.",
+            "Mergel, I., Edelmann, N., & Haug, N. (2019). Defining digital transformation: Results from expert interviews. Government Information Quarterly, 36(4), 101385. https://doi.org/10.1016/j.giq.2019.06.002",
+        ],
     },
 }
 
@@ -724,6 +797,7 @@ RECOMENDACIONES_CONFIG = {
     "fallback_diagnostico": "El territorio muestra un perfil relativamente sólido en todas las dimensiones evaluadas.",
     "fallback_siguiente_paso": "Pasar de consolidación a monitoreo continuo con indicadores temporales, benchmarking y auditoría externa.",
     "fallback_literatura": "ISO 37122 + evaluación continua",
+    "fallback_casos_referencia": [],
     "narrative_priority_label": "Complementaria",
 }
 
@@ -749,19 +823,79 @@ RECOMENDACIONES_NARRATIVAS_EXTRAS = {
 LITERATURA = {
     "general": [
         {
-            "titulo": "UN-Habitat - International Guidelines on People-Centred Smart Cities",
-            "descripcion": "Marco para orientar una transición digital centrada en personas, inclusión y gobernanza.",
-            "fuente": "UN-Habitat",
+            "titulo": "Albino, V., Berardi, U., & Dangelico, R. M. (2015)",
+            "descripcion": "Smart cities: Definitions, dimensions, performance, and initiatives.",
+            "fuente": "Journal of Urban Technology, 22(1), 3–21. https://doi.org/10.1080/10630732.2014.942092",
         },
         {
-            "titulo": "OECD - Smart City Data Governance",
-            "descripcion": "Buenas prácticas para gobernanza, interoperabilidad y uso responsable de datos urbanos.",
-            "fuente": "OECD",
+            "titulo": "BID. Banco Interamericano de Desarrollo. (2016)",
+            "descripcion": "La ruta hacia las smart cities: Migrando de una gestión tradicional a la ciudad inteligente.",
+            "fuente": "https://publications.iadb.org/publications/spanish/document/La-ruta-hacia-las-smart-cities-Migrando-de-una-gestion-tradicional-a-la-ciudad-inteligente.pdf",
         },
         {
-            "titulo": "ISO 37122 - Indicators for Smart Cities",
-            "descripcion": "Conjunto de indicadores para medir desempeño y madurez de ciudades inteligentes.",
-            "fuente": "ISO",
+            "titulo": "BID. Banco Interamericano de Desarrollo. (2020)",
+            "descripcion": "Guía para gobiernos digitales.",
+            "fuente": "BID. https://publications.iadb.org/es/guia-para-gobiernos-digitales",
+        },
+        {
+            "titulo": "BID. Banco Interamericano de Desarrollo. (2022)",
+            "descripcion": "Guía de transformación digital del gobierno.",
+            "fuente": "https://publications.iadb.org/es/guia-de-transformacion-digital-del-gobierno",
+        },
+        {
+            "titulo": "CEPAL. Comisión Económica para América Latina y el Caribe. (2014)",
+            "descripcion": "La economía digital para el cambio estructural y la igualdad.",
+            "fuente": "Naciones Unidas. https://repositorio.cepal.org/handle/11362/36766",
+        },
+        {
+            "titulo": "CIPPEC. Centro de Implementación de Políticas Públicas para la Equidad y el Crecimiento. (2024)",
+            "descripcion": "Transformación pública digital: La agenda municipal (Documento de Políticas Públicas No. 246).",
+            "fuente": "https://www.cippec.org/wp-content/uploads/2024/07/DPP-246-EyG-Transformacion-publica-digital-la-agenda-municipal-07.24.pdf",
+        },
+        {
+            "titulo": "Criado, J. I., & Gil-García, J. R. (2019)",
+            "descripcion": "Creating public value through smart technologies and strategies: From digital services to artificial intelligence.",
+            "fuente": "Government Information Quarterly, 36(4), 101404. https://doi.org/10.1016/j.giq.2019.101404",
+        },
+        {
+            "titulo": "KPMG. (2017)",
+            "descripcion": "Smart cities: A roadmap for development.",
+            "fuente": "https://www.researchgate.net/publication/312106742_Smart_Cities_-_A_Roadmap_for_Development",
+        },
+        {
+            "titulo": "McKinsey Global Institute. (2018)",
+            "descripcion": "Smart cities: Digital solutions for a more livable future.",
+            "fuente": "https://www.mckinsey.com/~/media/mckinsey/business%20functions/operations/our%20insights/smart%20cities%20digital%20solutions%20for%20a%20more%20livable%20future/mgi-smart-cities-full-report.pdf",
+        },
+        {
+            "titulo": "Meijer, A., & Bolívar, M. P. R. (2016)",
+            "descripcion": "Governing the smart city: A review of the literature on smart urban governance.",
+            "fuente": "International Review of Administrative Sciences, 82(2), 392–408. https://doi.org/10.1177/0020852314564308",
+        },
+        {
+            "titulo": "Mergel, I., Edelmann, N., & Haug, N. (2019)",
+            "descripcion": "Defining digital transformation: Results from expert interviews.",
+            "fuente": "Government Information Quarterly, 36(4), 101385. https://doi.org/10.1016/j.giq.2019.06.002",
+        },
+        {
+            "titulo": "Matus Ruiz, Maximino, Ramírez Autrán, Rodrigo. (2016)",
+            "descripcion": "Ciudades Inteligentes en Iberoamérica; ejemplos de iniciativas desde el sector privado, la sociedad civil, el gobierno y la academia.",
+            "fuente": "Fondo de Información y Documentación para la Industria (INFOTEC), Ciudad de México.",
+        },
+        {
+            "titulo": "ONU-Hábitat. (2022)",
+            "descripcion": "People-centered smart cities playbook.",
+            "fuente": "Programa de las Naciones Unidas para los Asentamientos Humanos. https://unhabitat.org/programme/people-centered-smart-cities",
+        },
+        {
+            "titulo": "OCDE. Organización para la Cooperación y el Desarrollo Económicos. (2019)",
+            "descripcion": "El camino hacia un sector público impulsado por datos.",
+            "fuente": "OECD Publishing. https://doi.org/10.1787/059814a7-en",
+        },
+        {
+            "titulo": "Wirtz, B. W., Weyerer, J. C., & Geyer, C. (2019)",
+            "descripcion": "Artificial intelligence and the public sector—Applications and challenges.",
+            "fuente": "International Journal of Public Administration, 42(7), 596–615. https://doi.org/10.1080/01900692.2018.1498103",
         },
     ]
 }

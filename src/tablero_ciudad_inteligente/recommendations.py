@@ -25,6 +25,15 @@ def _parsear_multiple(valor: object) -> list[str]:
     return [parte.strip() for parte in texto.split(";") if parte.strip()]
 
 
+def _asegurar_lista(valor: Any) -> list[str]:
+    if valor is None:
+        return []
+    if isinstance(valor, list):
+        return [str(x).strip() for x in valor if str(x).strip()]
+    texto = str(valor).strip()
+    return [texto] if texto else []
+
+
 def _recomendacion_dimension(clave: str) -> dict[str, Any]:
     return RECOMENDACIONES_DIMENSION[clave]
 
@@ -40,7 +49,12 @@ def _agregar_recomendaciones_extras(fila, recomendaciones: list[dict[str, Any]])
                 "dimension": RECOMENDACIONES_NARRATIVAS_EXTRAS["innovacion_gobierno_dimension"],
                 "diagnostico": RECOMENDACIONES_NARRATIVAS_EXTRAS["innovacion_gobierno_diagnostico"],
                 "siguiente_paso": RECOMENDACIONES_NARRATIVAS_EXTRAS["innovacion_gobierno_siguiente_paso"],
-                "literatura": RECOMENDACIONES_NARRATIVAS_EXTRAS["innovacion_gobierno_literatura"],
+                "casos_referencia": _asegurar_lista(
+                    RECOMENDACIONES_NARRATIVAS_EXTRAS.get("innovacion_gobierno_casos_referencia", [])
+                ),
+                "literatura": _asegurar_lista(
+                    RECOMENDACIONES_NARRATIVAS_EXTRAS.get("innovacion_gobierno_literatura", [])
+                ),
             }
         )
 
@@ -55,7 +69,12 @@ def _agregar_recomendaciones_extras(fila, recomendaciones: list[dict[str, Any]])
                 "dimension": RECOMENDACIONES_NARRATIVAS_EXTRAS["economia_patrimonio_dimension"],
                 "diagnostico": RECOMENDACIONES_NARRATIVAS_EXTRAS["economia_patrimonio_diagnostico"],
                 "siguiente_paso": RECOMENDACIONES_NARRATIVAS_EXTRAS["economia_patrimonio_siguiente_paso"],
-                "literatura": RECOMENDACIONES_NARRATIVAS_EXTRAS["economia_patrimonio_literatura"],
+                "casos_referencia": _asegurar_lista(
+                    RECOMENDACIONES_NARRATIVAS_EXTRAS.get("economia_patrimonio_casos_referencia", [])
+                ),
+                "literatura": _asegurar_lista(
+                    RECOMENDACIONES_NARRATIVAS_EXTRAS.get("economia_patrimonio_literatura", [])
+                ),
             }
         )
 
@@ -81,7 +100,8 @@ def construir_recomendaciones(fila, dimensiones: list[ResultadoDimension]) -> li
                         puntaje=dimension.puntaje,
                     ),
                     "siguiente_paso": base["siguiente_paso"],
-                    "literatura": base["literatura"],
+                    "casos_referencia": _asegurar_lista(base.get("casos_referencia", [])),
+                    "literatura": _asegurar_lista(base.get("literatura", [])),
                 }
             )
 
@@ -92,7 +112,12 @@ def construir_recomendaciones(fila, dimensiones: list[ResultadoDimension]) -> li
                 "dimension": RECOMENDACIONES_CONFIG["fallback_dimension"],
                 "diagnostico": RECOMENDACIONES_CONFIG["fallback_diagnostico"],
                 "siguiente_paso": RECOMENDACIONES_CONFIG["fallback_siguiente_paso"],
-                "literatura": RECOMENDACIONES_CONFIG["fallback_literatura"],
+                "casos_referencia": _asegurar_lista(
+                    RECOMENDACIONES_CONFIG.get("fallback_casos_referencia", [])
+                ),
+                "literatura": _asegurar_lista(
+                    RECOMENDACIONES_CONFIG.get("fallback_literatura", [])
+                ),
             }
         )
 

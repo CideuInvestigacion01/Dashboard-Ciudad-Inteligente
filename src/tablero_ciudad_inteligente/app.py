@@ -36,7 +36,18 @@ def cargar_ejemplo() -> pd.DataFrame:
 
 
 def _csv_recomendaciones(resultado) -> bytes:
-    df_recomendaciones = tabla_recomendaciones(resultado)
+    df_recomendaciones = tabla_recomendaciones(resultado).copy()
+
+    if "casos_referencia" in df_recomendaciones.columns:
+        df_recomendaciones["casos_referencia"] = df_recomendaciones["casos_referencia"].apply(
+            lambda x: " | ".join(x) if isinstance(x, list) else x
+        )
+
+    if "literatura" in df_recomendaciones.columns:
+        df_recomendaciones["literatura"] = df_recomendaciones["literatura"].apply(
+            lambda x: " | ".join(x) if isinstance(x, list) else x
+        )
+
     return df_recomendaciones.to_csv(index=False).encode("utf-8-sig")
 
 
@@ -175,7 +186,18 @@ for i, recomendacion in enumerate(resultado.recomendaciones, start=1):
     st.write(f"**{TEXTOS_APP['recommendation_priority_label']}:** {recomendacion['prioridad']}")
     st.write(f"**{TEXTOS_APP['recommendation_diagnostic_label']}:** {recomendacion['diagnostico']}")
     st.write(f"**{TEXTOS_APP['recommendation_next_step_label']}:** {recomendacion['siguiente_paso']}")
-    st.write(f"**{TEXTOS_APP['recommendation_literature_label']}:** {recomendacion['literatura']}")
+
+    casos_referencia = recomendacion.get("casos_referencia", [])
+    if casos_referencia:
+        st.write(f"**{TEXTOS_APP['recommendation_case_studies_label']}:**")
+        for caso in casos_referencia:
+            st.write(f"- {caso}")
+
+    literatura = recomendacion.get("literatura", [])
+    if literatura:
+        st.write(f"**{TEXTOS_APP['recommendation_literature_label']}:**")
+        for referencia in literatura:
+            st.write(f"- {referencia}")
 
 st.download_button(
     label=TEXTOS_APP["recommendations_download_button"],
